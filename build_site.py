@@ -66,6 +66,7 @@ for r in results:
     stocks.append({
         "ticker": r["ticker"], "name": r["name"], "score": r["score"],
         "action": r["action"].replace(" / ", "/"), "cat": cat(r["score"]),
+        "held": bool(r.get("is_holding")),
         "price": r["close"], "cur": "₩" if r["currency"] == "KRW" else "$",
         "stop": r["stop_price"], "target": r["target_price"],
         "pos": f"{r['position_pct_max']}%",
@@ -179,6 +180,44 @@ if not focus:
               '<b>今天无操作</b> — 没有达到关注线的股票，不新开仓，只等趋势走出来。'
               '</div>\n  <div class="market">')
     out = out.replace('  <div class="market">', banner, 1)
+
+# V3.2: 有持仓时, 在总览上方加一张"我的持仓"表 (成本/现价/浮盈亏/止损/建议).
+# 没持仓时什么都不加, 页面和原来一模一样.
+holdings = data.get("holdings", [])
+if holdings:
+    rows = ""
+    for h in holdings:
+        cur = "₩" if h.get("currency") == "KRW" else "$"
+        pnl_color = "var(--green)" if h["pnl"] >= 0 else "var(--red)"
+        rows += (
+            f'<tr><td style="padding:6px 8px"><b>{esc(h["ticker"])}</b> {esc(h["name"])}</td>'
+            f'<td style="padding:6px 8px">{h["shares"]} 股</td>'
+            f'<td style="padding:6px 8px">{cur}{h["entry_price"]}</td>'
+            f'<td style="padding:6px 8px">{cur}{h["close"]}</td>'
+            f'<td style="padding:6px 8px;color:{pnl_color}">{h["pnl"]:+.2f} ({h["pnl_pct"]:+.2f}%)</td>'
+            f'<td style="padding:6px 8px;color:var(--red)">{cur}{h["stop_price"]}</td>'
+            f'<td style="padding:6px 8px">{esc(h["action"])}</td></tr>')
+    panel = (
+        '<div class="panel" style="margin-top:14px">'
+        f'<h2>我的持仓 · {len(holdings)} 只</h2>'
+        '<table style="width:100%;border-collapse:collapse;font-size:13px">'
+        '<tr style="color:var(--muted);text-align:left">'
+        '<th style="padding:6px 8px">代码</th><th style="padding:6px 8px">股数</th>'
+        '<th style="padding:6px 8px">成本</th><th style="padding:6px 8px">现价</th>'
+        '<th style="padding:6px 8px">浮盈亏</th><th style="padding:6px 8px">止损</th>'
+        '<th style="padding:6px 8px">建议</th></tr>'
+        f'{rows}</table>'
+        '<p style="font-size:13px;color:var(--muted);margin:12px 0 0">'
+        '止损是活的，每天按 ATR 重算；跌破止损按计划离场。'
+        '持仓卡片上也有“已持有”标记。</p></div>\n  <div class="market">')
+    out = out.replace('  <div class="market">', panel, 1)
+    # 持仓卡片上加"已持有"标记
+    out = out.replace(
+        '<span class="tag ${tagClass(s.cat)}" style="margin-top:6px">${s.action}</span>',
+        '<span class="tag ${tagClass(s.cat)}" style="margin-top:6px">${s.action}</span>'
+        '${s.held?\'<span class="tag green" style="margin-top:6px;margin-left:6px">已持有</span>\':\'\'}',
+        1)
+    assert "已持有</span>" in out, "持仓标记插入失败"
 
 # 页脚加生成时间, 打开页面就知道数据是哪天几点生成的
 sub(r'价格为 \d{4}-\d{2}-\d{2} 收盘数据',
