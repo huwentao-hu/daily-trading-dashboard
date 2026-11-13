@@ -63,10 +63,19 @@ for r in results:
     earn = r.get("earnings") or {}
     days = earn.get("days_away")
     earn_date = earn.get("date", "") if isinstance(days, int) and days >= 0 else ""
+    # V3.3: 仓位建议双币种 (人民币 + 美元一起显示)
+    sug = r.get("suggest_cny") or {}
+    if sug.get("shares"):
+        suggest_txt = (f"可买 {sug['shares']} 股 · 约 ¥{sug['amount_cny']:,} / "
+                       f"${sug['amount_usd']:,.2f}")
+    elif sug:
+        suggest_txt = "按 1% 风险买不到 1 股，止损距离太宽，等回调"
+    else:
+        suggest_txt = ""
     stocks.append({
         "ticker": r["ticker"], "name": r["name"], "score": r["score"],
         "action": r["action"].replace(" / ", "/"), "cat": cat(r["score"]),
-        "held": bool(r.get("is_holding")),
+        "held": bool(r.get("is_holding")), "suggest": suggest_txt,
         "price": r["close"], "cur": "₩" if r["currency"] == "KRW" else "$",
         "stop": r["stop_price"], "target": r["target_price"],
         "pos": f"{r['position_pct_max']}%",
@@ -100,6 +109,12 @@ out = out.replace(
     "      ${newsHtml}\n      <div style=\"font-size:12px;color:var(--muted);margin-top:8px\">数据源: ${esc(s.src||'')}</div>\n      <button class=\"details-btn\"",
     1)
 assert "数据源: ${esc(s.src" in out, "卡片数据源行插入失败"
+# V3.3: 卡片上显示仓位建议 (双币种), 只有高分未持仓的才有 suggest
+out = out.replace(
+    "      ${srHtml}${maHtml}${earnHtml}",
+    """      ${srHtml}${maHtml}${earnHtml}${s.suggest?`<div style="margin-top:10px;font-size:13px;background:var(--surface2);border-radius:10px;padding:8px">💰 仓位建议：${esc(s.suggest)}</div>`:''}""",
+    1)
+assert "仓位建议：" in out, "卡片仓位建议行插入失败"
 assert '"ticker": "AAPL"' in out, "STOCKS 替换失败"
 assert '"Jensen Huang vs. Steve Jobs' in out, "NEWS 替换失败"
 
@@ -185,16 +200,26 @@ if not focus:
 # 没持仓时什么都不加, 页面和原来一模一样.
 holdings = data.get("holdings", [])
 if holdings:
+    # V3.3: 美元持仓的成本/现价/浮盈亏同时显示人民币 (用当天汇率 fx_usdcny 换算)
+    fx = data.get("fx_usdcny") or 0
     rows = ""
     for h in holdings:
         cur = "₩" if h.get("currency") == "KRW" else "$"
         pnl_color = "var(--green)" if h["pnl"] >= 0 else "var(--red)"
+        if h.get("currency") == "USD" and fx:
+            cost_txt = f"${h['entry_price']}（¥{h['entry_price'] * fx:,.0f}）"
+            close_txt = f"${h['close']}（¥{h['close'] * fx:,.0f}）"
+            pnl_txt = f"{h['pnl']:+.2f} ({h['pnl_pct']:+.2f}%)（¥{h['pnl'] * fx:+,.0f}）"
+        else:
+            cost_txt = f"{cur}{h['entry_price']}"
+            close_txt = f"{cur}{h['close']}"
+            pnl_txt = f"{cur}{h['pnl']:+.2f} ({h['pnl_pct']:+.2f}%)"
         rows += (
             f'<tr><td style="padding:6px 8px"><b>{esc(h["ticker"])}</b> {esc(h["name"])}</td>'
             f'<td style="padding:6px 8px">{h["shares"]} 股</td>'
-            f'<td style="padding:6px 8px">{cur}{h["entry_price"]}</td>'
-            f'<td style="padding:6px 8px">{cur}{h["close"]}</td>'
-            f'<td style="padding:6px 8px;color:{pnl_color}">{h["pnl"]:+.2f} ({h["pnl_pct"]:+.2f}%)</td>'
+            f'<td style="padding:6px 8px">{cost_txt}</td>'
+            f'<td style="padding:6px 8px">{close_txt}</td>'
+            f'<td style="padding:6px 8px;color:{pnl_color}">{pnl_txt}</td>'
             f'<td style="padding:6px 8px;color:var(--red)">{cur}{h["stop_price"]}</td>'
             f'<td style="padding:6px 8px">{esc(h["action"])}</td></tr>')
     panel = (
@@ -218,6 +243,123 @@ if holdings:
         '${s.held?\'<span class="tag green" style="margin-top:6px;margin-left:6px">已持有</span>\':\'\'}',
         1)
     assert "已持有</span>" in out, "持仓标记插入失败"
+
+# V3.3: 网页上手动改自选股的面板.
+# 注意: 这个网站是静态页面, 没有后端, 网页自己改不了 GitHub 上的数据.
+# 所以面板的做法是: 在网页上填好 -> 存在你自己的浏览器里 (localStorage, 不上传) ->
+# 生成一段发给 Muse 的话 -> 你复制发给我, 我加进系统, 第二天早上 7 点的分析就带上它.
+# 加进去了, 下次打开页面时面板会自动把那条从待发送里去掉 (因为已经在 STOCKS 里了).
+# 面板是固定内容, 不用插值, 所以用普通字符串 (不是 f-string, 里面有 JS 的 ${}).
+MANAGE_PANEL = r'''
+  <section class="panel" id="manage-panel" style="margin-top:14px">
+    <h2>管理自选股 · 在网页上改</h2>
+    <p style="font-size:13px;color:var(--muted);margin:0 0 12px">在这里填好，点“加入待发送”，再点复制，把那段话发给我，我加进系统。第二天早上 7 点的分析就会带上它；加进去了，这里会自动消失。</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:end">
+      <label style="font-size:12px;color:var(--muted)">代码<br><input id="mg-ticker" class="search" style="flex:none;min-width:110px" placeholder="如 JPM" autocomplete="off"></label>
+      <label style="font-size:12px;color:var(--muted)">名称<br><input id="mg-name" class="search" style="flex:none;min-width:110px" placeholder="如 摩根大通"></label>
+      <label style="font-size:12px;color:var(--muted)">类型<br><select id="mg-type" class="select"><option value="mega">大盘科技</option><option value="chip">芯片</option><option value="china_adr">中概</option><option value="other">其他</option></select></label>
+      <button class="chip" id="mg-add-btn" type="button">＋ 加入待发送</button>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:end;margin-top:10px">
+      <label style="font-size:12px;color:var(--muted)">删除一只<br><select id="mg-remove" class="select"></select></label>
+      <button class="chip" id="mg-remove-btn" type="button">－ 加入待发送</button>
+    </div>
+    <div id="mg-msg" style="font-size:13px;margin-top:10px"></div>
+    <div id="mg-pending" style="margin-top:10px"></div>
+    <div id="mg-send" style="display:none;margin-top:10px">
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">发给我的话（点复制，粘贴到聊天里发我）：</div>
+      <textarea id="mg-text" readonly rows="3" style="width:100%;border:1px solid var(--line);border-radius:10px;background:var(--surface2);padding:10px;font-size:13px"></textarea>
+      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+        <button class="chip" id="mg-copy-btn" type="button">复制</button>
+        <button class="chip" id="mg-clear-btn" type="button">清空待发送</button>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin:12px 0 0">你的请求只存在你自己的浏览器里，不会上传到任何地方。删的时候，如果那只还在持仓里，得先卖掉再删。未上市的公司（如 SpaceX）加不进自动分析，在聊天里告诉我，我记到手动关注里。</p>
+  </section>
+  <script>
+  (function(){
+    var KEY='dq_pending_watchlist_v1';
+    function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){ return []; } }
+    function save(list){ try{ localStorage.setItem(KEY, JSON.stringify(list)); }catch(e){} }
+    function tickers(){ return (typeof STOCKS!=='undefined'?STOCKS:[]).map(function(s){return s.ticker;}); }
+    function esc(s){ return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+    function prune(list){
+      var cur=tickers();
+      return list.filter(function(it){
+        if(it.op==='add') return cur.indexOf(it.ticker)===-1;
+        return cur.indexOf(it.ticker)!==-1;
+      });
+    }
+    function msg(text, ok){
+      var el=document.getElementById('mg-msg');
+      el.textContent=text||'';
+      el.style.color=ok?'var(--green)':'var(--red)';
+    }
+    function render(){
+      var list=prune(load()); save(list);
+      var sel=document.getElementById('mg-remove');
+      var curSel=sel.value;
+      sel.innerHTML=tickers().map(function(t){return '<option value="'+esc(t)+'">'+esc(t)+'</option>';}).join('');
+      if(curSel) sel.value=curSel;
+      var box=document.getElementById('mg-pending');
+      if(!list.length){
+        box.innerHTML='<div style="font-size:13px;color:var(--muted)">待发送是空的。</div>';
+        document.getElementById('mg-send').style.display='none';
+        return;
+      }
+      var typeName={mega:'大盘科技',chip:'芯片',china_adr:'中概',other:'其他'};
+      box.innerHTML=list.map(function(it,i){
+        var label=it.op==='add'?('加：'+it.ticker+' '+it.name+'（'+(typeName[it.type]||it.type)+'）'):('删：'+it.ticker);
+        return '<div style="display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:13px;padding:6px 0;border-top:1px dashed var(--line)"><span>'+esc(label)+'</span><button class="chip" type="button" data-i="'+i+'" onclick="mgDel(this)">删除</button></div>';
+      }).join('');
+      var lines=['请帮我改自选股：'].concat(list.map(function(it){
+        return it.op==='add'?('加：'+it.ticker+' '+it.name+'（'+it.type+'）'):('删：'+it.ticker);
+      }));
+      document.getElementById('mg-text').value=lines.join('\n');
+      document.getElementById('mg-send').style.display='block';
+    }
+    window.mgDel=function(btn){
+      var list=load(); list.splice(Number(btn.getAttribute('data-i')),1); save(list); render();
+    };
+    function init(){
+      render();
+      document.getElementById('mg-add-btn').addEventListener('click',function(){
+        var t=document.getElementById('mg-ticker').value.trim().toUpperCase();
+        var name=document.getElementById('mg-name').value.trim()||t;
+        var type=document.getElementById('mg-type').value;
+        if(!/^[A-Z0-9.\-]{1,12}$/.test(t)){ msg('代码格式不对：只支持字母、数字、点和短横线，如 JPM、000660.KS'); return; }
+        var list=load();
+        if(tickers().indexOf(t)!==-1){ msg('这只已经在自选里了，不用重复加。', true); return; }
+        if(list.some(function(it){return it.ticker===t;})){ msg('这只已经在待发送里了。', true); return; }
+        list.push({op:'add',ticker:t,name:name,type:type}); save(list);
+        document.getElementById('mg-ticker').value=''; document.getElementById('mg-name').value='';
+        msg('已加入待发送：加 '+t+' '+name+'。点下面的复制发给我。', true); render();
+      });
+      document.getElementById('mg-remove-btn').addEventListener('click',function(){
+        var t=document.getElementById('mg-remove').value;
+        if(!t){ msg('自选里没有可删的股票。'); return; }
+        var list=load();
+        if(list.some(function(it){return it.ticker===t;})){ msg('这只已经在待发送里了。', true); return; }
+        list.push({op:'remove',ticker:t,name:'',type:''}); save(list);
+        msg('已加入待发送：删 '+t+'。点下面的复制发给我。', true); render();
+      });
+      document.getElementById('mg-copy-btn').addEventListener('click',function(){
+        var ta=document.getElementById('mg-text');
+        function done(){ msg('已复制，去聊天里粘贴发我就行。', true); }
+        if(navigator.clipboard&&navigator.clipboard.writeText){
+          navigator.clipboard.writeText(ta.value).then(done,function(){ ta.select(); document.execCommand('copy'); done(); });
+        }else{ ta.select(); document.execCommand('copy'); done(); }
+      });
+      document.getElementById('mg-clear-btn').addEventListener('click',function(){
+        save([]); msg('已清空。', true); render();
+      });
+    }
+    if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',init); } else { init(); }
+  })();
+  </script>'''
+
+out = out.replace('  <div class="controls">', MANAGE_PANEL + '\n  <div class="controls">', 1)
+assert 'id="manage-panel"' in out, "管理自选股面板插入失败"
 
 # 页脚加生成时间, 打开页面就知道数据是哪天几点生成的
 sub(r'价格为 \d{4}-\d{2}-\d{2} 收盘数据',
