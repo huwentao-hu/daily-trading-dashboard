@@ -30,11 +30,16 @@ def card(r):
     news_s = f"<p>新闻 (只供鉴别, 不改变评分):</p><ul>{news}</ul>" if news else "<p>新闻: 暂无</p>"
     reasons = "".join(f"<li>{esc(x)}</li>" for x in r["reasons"])
     cls = "watch" if r["score"] >= 75 else "hold" if r["score"] >= 55 else "avoid" if r["score"] < 25 else "wait"
+    badge = "badge-green" if r["score"] >= 75 else "badge-amber" if r["score"] >= 55 else "badge-red" if r["score"] < 25 else "badge-grey"
     return f"""
     <details class="card {cls}" data-score="{r['score']}" data-action="{esc(r['action'])}">
-      <summary><b>{r['ticker']} {esc(r['name'])}</b> <span class="score">{r['score']}分 {ch_s}</span> — {esc(r['action'])}</summary>
-      <p>收盘 {r['close']} {r['currency']} | 止损 <b>{r['stop_price']}</b> | 目标 <b>{r['target_price']}</b> | 仓位上限 {r['position_pct_max']}%</p>
-      <p>MA20 {r['ma20']} | MA50 {r['ma50']} | MA200 {r['ma200']} | RSI {r['rsi']} | ATR {r['atr']} | 阻力 {r['resistance_20d']} | 支撑 {r['support_20d']} | 数据源 {r.get('source','')}</p>
+      <summary>
+        <span class="ticker">{r['ticker']} {esc(r['name'])}</span>
+        <span class="score {badge}">{r['score']}分 {ch_s}</span>
+        <span class="action">{esc(r['action'])}</span>
+        <span class="meta">收盘 {r['close']} {r['currency']} &nbsp;|&nbsp; 止损 <b>{r['stop_price']}</b> &nbsp;|&nbsp; 目标 <b>{r['target_price']}</b> &nbsp;|&nbsp; 仓位上限 {r['position_pct_max']}%</span>
+      </summary>
+      <div class="grid"><span>MA20 {r['ma20']}</span><span>MA50 {r['ma50']}</span><span>MA200 {r['ma200']}</span><span>RSI {r['rsi']}</span><span>ATR {r['atr']}</span><span>阻力 {r['resistance_20d']}</span><span>支撑 {r['support_20d']}</span><span>数据源 {r.get('source','')}</span></div>
       <p>{esc(r['action_note'])}</p>
       <ul>{reasons}</ul>
       <p><i>如果错了怎么办: {esc(r['if_wrong'])}</i></p>
@@ -52,18 +57,35 @@ html_doc = f"""<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>每日持仓分析 {data['date']}</title>
 <style>
-body{{font-family:system-ui,-apple-system,sans-serif;max-width:920px;margin:24px auto;padding:0 16px;line-height:1.6;color:#111}}
-.card{{border:1px solid #ddd;border-radius:12px;padding:12px 16px;margin:12px 0}}
-.score{{background:#111;color:#fff;padding:2px 10px;border-radius:999px}}
-button{{padding:6px 12px;margin:4px;border-radius:999px;border:1px solid #ccc;background:#fff;cursor:pointer}}
-button.active{{background:#111;color:#fff}}
-input{{padding:6px 10px;width:220px}}
-h1{{font-size:24px}} summary{{cursor:pointer;font-size:17px}}
+body{{font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;max-width:960px;margin:0 auto;padding:24px 16px 48px;line-height:1.6;color:#111827;background:#f8fafc}}
+header{{background:#111827;color:#fff;border-radius:16px;padding:20px 24px;margin-bottom:16px}}
+header h1{{margin:0;font-size:26px}} header p{{margin:6px 0 0;color:#d1d5db}}
+.stats{{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}}
+.stat{{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:12px;text-align:center}}
+.stat b{{font-size:24px;display:block}} .stat span{{color:#6b7280;font-size:13px}}
+.card{{background:#fff;border:1px solid #e5e7eb;border-left:5px solid #9ca3af;border-radius:12px;padding:14px 16px;margin:12px 0}}
+.card.watch{{border-left-color:#16a34a}} .card.hold{{border-left-color:#ca8a04}} .card.avoid{{border-left-color:#dc2626}}
+.score{{color:#fff;padding:3px 10px;border-radius:999px;font-weight:700;white-space:nowrap}}
+.badge-green{{background:#16a34a}} .badge-amber{{background:#ca8a04}} .badge-red{{background:#dc2626}} .badge-grey{{background:#6b7280}}
+.ticker{{font-size:18px;font-weight:700}} .action{{font-weight:600}}
+.meta{{display:block;color:#374151;margin-top:6px;font-size:14px}}
+.grid{{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:#f9fafb;border-radius:8px;padding:10px;font-size:13px;margin:10px 0}}
+button{{padding:7px 14px;margin:4px;border-radius:999px;border:1px solid #d1d5db;background:#fff;cursor:pointer}}
+button.active{{background:#111827;color:#fff;border-color:#111827}}
+input{{padding:8px 12px;width:240px;border:1px solid #d1d5db;border-radius:999px}}
+h1{{font-size:24px}} summary{{cursor:pointer;list-style:none}} summary::-webkit-details-marker{{display:none}}
+@media(max-width:640px){{.stats{{grid-template-columns:repeat(2,1fr)}} .grid{{grid-template-columns:repeat(2,1fr)}}}}
 </style></head><body>
-<h1>每日持仓分析 {data['date']}</h1>
+<header><h1>每日持仓分析 {data['date']}</h1>
 <p>数据源: {esc(data['source'])} | 现在持仓: {data.get('holdings_count',0)} 只 | 策略: 趋势跟踪, 按类型分, 打分制 | 不下单</p>
-<p>大盘: SPY {spy_score}分, QQQ {qqq_score}分 — 观望, 不是强势, 新开仓要谨慎。</p>
-<p><b>关注 {watch} 只 / 观望 {wait} 只 / 回避 {avoid} 只</b> — 关注只是可分批, 不是让你全仓买入。SpaceX 未上市, 手动关注。海力士价格单位是韩元 KRW。</p>
+<p>大盘: SPY {spy_score}分, QQQ {qqq_score}分 — 观望, 不是强势, 新开仓要谨慎。</p></header>
+<div class="stats">
+<div class="stat"><b>{watch}</b><span>关注 / 可分批</span></div>
+<div class="stat"><b>{len(results)-watch-avoid}</b><span>观望 / 持有偏多</span></div>
+<div class="stat"><b>{avoid}</b><span>回避</span></div>
+<div class="stat"><b>14</b><span>自选股总数</span></div>
+</div>
+<p><b>关注只是可分批, 不是让你全仓买入。</b> SpaceX 未上市, 手动关注。海力士价格单位是韩元 KRW。</p>
 <p>
 <button data-filter="all" class="active" onclick="filterCards('all',this)">全部 {len(results)}</button>
 <button data-filter="watch" onclick="filterCards('watch',this)">关注 {watch}</button>
