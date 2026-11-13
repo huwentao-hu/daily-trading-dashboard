@@ -24,11 +24,30 @@ cd "$QT" || exit 1
 # NVDA 财报日 11-17 又变回 11-18), 已发布过的版本以备份为准, 不被重跑覆盖.
 PREV=$(ls -t reports/daily_analysis_20*.json 2>/dev/null | head -1 || true)
 [ -n "$PREV" ] && cp "$PREV" "$LOGDIR/backup_$(basename "$PREV")" && echo "已备份 $PREV"
-echo "[1/5] 跑每日分析 (Tiger 优先)..."
-if ! .venv/bin/python daily_analysis.py --source tiger; then
-  echo "Tiger 跑失败, 改用 yfinance 兜底 (会在页面上注明数据源)..."
-  .venv/bin/python daily_analysis.py --source yfinance || { echo "FAIL: yfinance 也失败了"; exit 1; }
+# Token 有效期提醒: TBHK token 30 天有效, 过期后 Tiger 取数会失败.
+# 文件上传于 2026-11-12, 约 2026-12-12 过期; 用到 25 天就提前警告, 别等断了才发现.
+TOKEN=/home/hatch/workspace/user/files/tiger_openapi_token.properties
+if [ -f "$TOKEN" ]; then
+  TOKEN_AGE=$(( ( $(date +%s) - $(stat -c %Y "$TOKEN") ) / 86400 ))
+  TOKEN_EXP=$(date -d "@$(( $(stat -c %Y "$TOKEN") + 30*86400 ))" +%F)
+  echo "Tiger token 已使用 $TOKEN_AGE 天, 约 $TOKEN_EXP 过期."
+  [ "$TOKEN_AGE" -ge 25 ] && echo "WARNING: Tiger token 还有 $((30-TOKEN_AGE)) 天过期, 请提前重新上传 token 文件, 否则自动跑会取不到老虎数据."
 fi
+echo "[1/5] 跑每日分析 (Tiger 优先)..."
+ANALYSIS_OUT=$(mktemp)
+if ! .venv/bin/python daily_analysis.py --source tiger >"$ANALYSIS_OUT" 2>&1; then
+  cat "$ANALYSIS_OUT"
+  echo "Tiger 跑失败, 改用 yfinance 兜底 (会在页面上注明数据源)..."
+  .venv/bin/python daily_analysis.py --source yfinance >"$ANALYSIS_OUT" 2>&1 || { cat "$ANALYSIS_OUT"; echo "FAIL: yfinance 也失败了"; exit 1; }
+fi
+cat "$ANALYSIS_OUT"
+# 兜底提醒: 某只股票拉取失败时会悄悄用本地缓存, 当天数据可能不完整;
+# 下面这行让它在日志里显眼, 跑任务的代理看到就要在晨报里说明.
+if grep -q "\[warn\]" "$ANALYSIS_OUT"; then
+  echo "WARNING: 以下股票用了本地缓存兜底, 今日数据可能不是最新:"
+  grep "\[warn\]" "$ANALYSIS_OUT"
+fi
+rm -f "$ANALYSIS_OUT"
 
 NEWEST=$(ls -t reports/daily_analysis_20*.json | head -1)
 [ -n "$NEWEST" ] || { echo "FAIL: 没找到日报 json"; exit 1; }
