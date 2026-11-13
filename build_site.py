@@ -313,13 +313,14 @@ MANAGE_PANEL = r'''
         return '<div style="display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:13px;padding:6px 0;border-top:1px dashed var(--line)"><span>'+esc(label)+'</span><button class="chip" type="button" data-i="'+i+'" onclick="mgDel(this)">删除</button></div>';
       }).join('');
       var lines=['请帮我改自选股：'].concat(list.map(function(it){
-        return it.op==='add'?('加：'+it.ticker+' '+it.name+'（'+it.type+'）'):('删：'+it.ticker);
+        return it.op==='add'?('加：'+it.ticker+' '+it.name+'（'+(typeName[it.type]||it.type)+'）'):('删：'+it.ticker);
       }));
       document.getElementById('mg-text').value=lines.join('\n');
       document.getElementById('mg-send').style.display='block';
     }
     window.mgDel=function(btn){
       var list=load(); list.splice(Number(btn.getAttribute('data-i')),1); save(list); render();
+      if(!load().length){ document.getElementById('mg-msg').textContent=''; }
     };
     function init(){
       render();
