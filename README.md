@@ -1,5 +1,7 @@
 # 每日持仓分析看板 — GitHub + Cloudflare 版
 
+线上网址: https://daily-trading-dashboard.18790098690-eaf.workers.dev/
+
 策略: 趋势跟踪, 按类型分, 打分 0-100, 不下单
 现在持仓: 0 只, 只有理财资产 (持仓有变化时更新 `holdings.yaml` 的记录, 这里只看自选股)
 

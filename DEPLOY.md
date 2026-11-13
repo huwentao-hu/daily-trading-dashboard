@@ -1,16 +1,24 @@
-# 部署步骤 — GitHub + Cloudflare Pages (透明版)
+# 部署步骤 — GitHub + Cloudflare (透明版)
 
 这个文件夹就是整个网站, 没有隐藏文件, 没有后端, 没有数据库.
 你可以在本地先打开 `index.html` 检查, 确认无误再上传.
+
+## 已部署 (2026-11-13 HU 自己连的)
+
+- **线上网址: https://daily-trading-dashboard.18790098690-eaf.workers.dev/**
+- 仓库: `huwentao-hu/daily-trading-dashboard` (公开仓库, main 分支)
+- 部署方式: Cloudflare Workers (HU 在 Cloudflare 里连的; 下面第三步写的 Pages 是另一种做法, 也能用, 但现在线上跑的是 Workers 这个)
+- 每天 07:00 自动更新 (定时任务已设好, 见"每天更新网站"一节)
 
 ## 文件清单 (每个文件是干什么的)
 
 | 文件 | 作用 | 你需要改吗 |
 |---|---|---|
 | `index.html` | 网站本身, 浏览器打开就是看板 | 不用手改, 由 `build_site.py` 生成 |
-| `data.json` | 2026-11-12 的每日分析原始数据 (14 只股票的评分/止损/目标/新闻/财报) | 每天更新时替换成新的 `daily_analysis_YYYY-MM-DD.json` |
-| `build_site.py` | 把 `data.json` 生成 `index.html` 的脚本, 只有 100 多行, 打开就能看懂 | 不用改, 除非你想改页面样式 |
-| `muse-export.html` | 之前 Muse 部署的那个网站导出的一份, 留作对照 | 不用上传, 只是备份 |
+| `data.json` | 当日分析的原始数据 (14 只股票的评分/止损/目标/新闻/财报) | 每天更新时替换成新的 `daily_analysis_YYYY-MM-DD.json` |
+| `build_site.py` | 把 `data.json` + `muse-export.html` 生成 `index.html` 的脚本, 200 行左右, 打开就能看懂 | 不用改, 除非你想改页面样式 |
+| `muse-export.html` | 版式模板, 就是 Muse 空间里那个看板的原版样式; `build_site.py` 生成页面时要读它, **必须一起放在仓库里** | 不用改 |
+| `daily_update.sh` | 每天自动更新的脚本: 跑分析 → 换 data.json → 生成网站 → 推 GitHub (07:00 定时任务跑的就是它) | 不用改 |
 | `DEPLOY.md` | 本文件 | — |
 | `README.md` | 网站说明 + 每天更新流程 | — |
 
@@ -21,9 +29,9 @@
 1. 打开 https://github.com/new
 2. Repository name: 比如 `daily-trading-dashboard` (你想叫什么都行, 告诉我一声就行)
 3. 选 **Public** 还是 **Private** 都可以:
-   - Public: 别人能看到你的代码和持仓分析, 但 Cloudflare Pages 部署最简单
-   - Private: 别人看不到代码, Cloudflare Pages 一样能部署 (需要授权 Cloudflare 读这个私有仓库)
-   - 我建议先用 **Private**, 因为里面是你的自选股分析
+   - Public: 别人能看到你的代码和持仓分析, 但 Cloudflare 部署最简单
+   - Private: 别人看不到代码, Cloudflare 一样能部署 (需要授权 Cloudflare 读这个私有仓库)
+   - 现在用的仓库是 **Public** 的 (建的时候就这么选了); 想改成 Private, 在仓库页面 Settings → Danger Zone → Change visibility 里改, 改完 Cloudflare 也要重新授权读这个仓库
 4. 不要勾选 Add README / .gitignore / license, 空仓库就行
 5. 点 Create repository, 记下仓库地址, 比如 `https://github.com/你的用户名/daily-trading-dashboard.git`
 
@@ -34,7 +42,7 @@
 ```bash
 cd daily-trading-dashboard   # 就是这个文件夹, 里面有 index.html 的那个
 git init
-git add index.html data.json build_site.py README.md DEPLOY.md
+git add index.html data.json build_site.py muse-export.html daily_update.sh README.md DEPLOY.md
 git commit -m "每日持仓分析看板 2026-11-12"
 git branch -M main
 git remote add origin https://github.com/你的用户名/daily-trading-dashboard.git
@@ -67,7 +75,11 @@ git push -u origin main
 2. 输入你的域名, 按提示在域名那里加一条 CNAME 记录就行
 3. 不绑域名也能用, 上面那个 `*.pages.dev` 的网址就是正式网址
 
-## 每天更新网站 (2 分钟, 每天一次)
+## 每天更新网站
+
+**现在是自动的, 不用手动做下面这些:** 每天 07:00 定时任务自动跑 `daily_update.sh`
+(跑分析 → 换 data.json → 生成网站 → 推 GitHub, Cloudflare 约 1 分钟后自动更新),
+跑完会在聊天里发一条晨报。下面是手动做法, 只在自动任务出问题时备用。
 
 网站不会自己更新, 因为数据是每天收盘后才有的。流程是:
 
