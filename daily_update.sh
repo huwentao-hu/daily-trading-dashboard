@@ -6,6 +6,8 @@
 # 依赖: 项目里的 .venv (系统 python3 没有 yfinance/tigeropen, 不能直接用)
 # 日志: ~/workspace/goals/personal-quant-trading-system/hidden_files/daily_update_YYYY-MM-DD.log
 set -u
+# 日志时间统一用北京时间 (定时任务里系统时区可能是 UTC, 不加这行日志文件名会差一天)
+export TZ=Asia/Shanghai
 QT=/home/hatch/workspace/quant-trading-system
 SITE=/home/hatch/workspace/github-cloudflare-dashboard
 LOGDIR=/home/hatch/workspace/goals/personal-quant-trading-system/hidden_files
