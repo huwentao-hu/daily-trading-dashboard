@@ -1,0 +1,798 @@
+{
+  "date": "2026-11-12",
+  "source": "tiger",
+  "holdings_count": 0,
+  "market": {
+    "SPY": {
+      "score": 40,
+      "close": 757.12,
+      "action": "观望"
+    },
+    "QQQ": {
+      "score": 40,
+      "close": 688.17,
+      "action": "观望"
+    }
+  },
+  "manual_watch": [
+    {
+      "name": "SpaceX",
+      "note": "未上市, 无公开股价, 只能手动关注新闻/估值, 不进自动分析"
+    }
+  ],
+  "results": [
+    {
+      "date": "2026-11-12",
+      "close": 354.88,
+      "ma20": 345.51,
+      "ma50": 338.48,
+      "ma200": 300.76,
+      "rsi": 54.7,
+      "macd_above_signal": true,
+      "atr": 9.51,
+      "atr_mult": 2.0,
+      "volume_vs_avg": 0.66,
+      "resistance_20d": 359.37,
+      "support_20d": 325.33,
+      "score": 90,
+      "action": "关注 / 可分批",
+      "action_note": "趋势强, 但仍建议分批, 不要一次全仓",
+      "stop_price": 335.86,
+      "target_price": 383.41,
+      "position_pct_max": 20,
+      "reasons": [
+        "收盘在 MA200 之上 (+25): 长期趋势向上",
+        "收盘在 MA50 之上 (+15): 中期趋势向上",
+        "收盘在 MA20 之上 (+10): 短期趋势向上",
+        "均线多头排列 MA20>MA50>MA200 (+15)",
+        "MACD 在信号线之上 (+10): 短期动量向上",
+        "RSI 55, 在 40-70 健康区间 (+10)",
+        "今日成交量不大 (+0)",
+        "收盘离 MA50 不超过 2 倍 ATR (+5): 不算追得太远"
+      ],
+      "if_wrong": "如果收盘跌破止损 335.86, 按计划离场, 不要死扛; 如果突破 20 日高点 359.37, 趋势可能转强, 再重新评估.",
+      "ticker": "AAPL",
+      "name": "苹果",
+      "type": "mega",
+      "currency": "USD",
+      "is_holding": false,
+      "source": "tiger",
+      "earnings": {
+        "date": "2027-01-29",
+        "days_away": 77,
+        "warn": false
+      },
+      "news": [
+        {
+          "title": "Jensen Huang vs. Steve Jobs: Can Nvidia also thrive without its visionary?",
+          "date": "2026-11-12"
+        },
+        {
+          "title": "Tony Robbins: How to make yourself irreplaceable in the AI era",
+          "date": "2026-11-12"
+        },
+        {
+          "title": "Tony Robbins: 4 rules the world's greatest investors follow",
+          "date": "2026-11-12"
+        }
+      ],
+      "score_change": 0
+    },
+    {
+      "date": "2026-11-12",
+      "close": 267.44,
+      "ma20": 256.5,
+      "ma50": 254.66,
+      "ma200": 244.47,
+      "rsi": 63.7,
+      "macd_above_signal": true,
+      "atr": 10.56,
+      "atr_mult": 2.0,
+      "volume_vs_avg": 0.68,
+      "resistance_20d": 275.34,
+      "support_20d": 229.36,
+      "score": 90,
+      "action": "关注 / 可分批",
+      "action_note": "趋势强, 但仍建议分批, 不要一次全仓",
+      "stop_price": 246.32,
+      "target_price": 299.12,
+      "position_pct_max": 20,
+      "reasons": [
+        "收盘在 MA200 之上 (+25): 长期趋势向上",
+        "收盘在 MA50 之上 (+15): 中期趋势向上",
+        "收盘在 MA20 之上 (+10): 短期趋势向上",
+        "均线多头排列 MA20>MA50>MA200 (+15)",
+        "MACD 在信号线之上 (+10): 短期动量向上",
+        "RSI 64, 在 40-70 健康区间 (+10)",
+        "今日成交量不大 (+0)",
+        "收盘离 MA50 不超过 2 倍 ATR (+5): 不算追得太远"
+      ],
+      "if_wrong": "如果收盘跌破止损 246.32, 按计划离场, 不要死扛; 如果突破 20 日高点 275.34, 趋势可能转强, 再重新评估.",
+      "ticker": "AMZN",
+      "name": "亚马逊",
+      "type": "mega",
+      "currency": "USD",
+      "is_holding": false,
+      "source": "tiger",
+      "earnings": null,
+      "news": [
+        {
+          "title": "PwC spots a major shift in retirement money",
+          "date": "2026-11-13"
+        },
+        {
+          "title": "Cerebras Adds Microsoft Partnership to Diversify Beyond OpenAI",
+          "date": "2026-11-12"
+        },
+        {
+          "title": "e.l.f. Beauty vs. lululemon athletica: Which Consumer Goods Stock Is a Better Buy for 2027?",
+          "date": "2026-11-12"
+        }
+      ],
+      "score_change": 0
+    },
+    {
+      "date": "2026-11-12",
+      "close": 585.3,
+      "ma20": 518.76,
+      "ma50": 552.99,
+      "ma200": 421.71,
+      "rsi": 57.4,
+      "macd_above_signal": true,
+      "atr": 44.61,
+      "atr_mult": 2.5,
+      "volume_vs_avg": 1.66,
+      "resistance_20d": 594.0,
+      "support_20d": 402.1,
+      "score": 85,
+      "action": "关注 / 可分批",
+      "action_note": "趋势强, 但仍建议分批, 不要一次全仓",
+      "stop_price": 473.77,
+      "target_price": 752.59,
+      "position_pct_max": 20,
+      "reasons": [
+        "收盘在 MA200 之上 (+25): 长期趋势向上",
+        "收盘在 MA50 之上 (+15): 中期趋势向上",
+        "收盘在 MA20 之上 (+10): 短期趋势向上",
+        "均线不是多头排列 (+0)",
+        "MACD 在信号线之上 (+10): 短期动量向上",
+        "RSI 57, 在 40-70 健康区间 (+10)",
+        "今日成交量大于 20 日均量 (+10): 有资金关注",
+        "收盘离 MA50 不超过 2 倍 ATR (+5): 不算追得太远"
+      ],
+      "if_wrong": "如果收盘跌破止损 473.77, 按计划离场, 不要死扛; 如果突破 20 日高点 594.0, 趋势可能转强, 再重新评估.",
+      "ticker": "AMD",
+      "name": "AMD",
+      "type": "chip",
+      "currency": "USD",
+      "is_holding": false,
+      "source": "tiger",
+      "earnings": {
+        "date": "2027-02-03",
+        "days_away": 82,
+        "warn": false
+      },
+      "news": [
+        {
+          "title": "AMD, Broadcom stocks jump as Nvidia CEO Jensen Huang resigns",
+          "date": "2026-11-12"
+        },
+        {
+          "title": "AMD CEO Lisa Su on data center backlash: Tech has to sell the vision",
+          "date": "2026-11-12"
+        },
+        {
+          "title": "AMD CEO Dr. Lisa Su reflects on her biggest lessons of 2026",
+          "date": "2026-11-12"
+        }
+      ],
+      "score_change": 0
+    },
+    {
+      "date": "2026-11-12",
+      "close": 523.0,
+      "ma20": 529.64,
+      "ma50": 518.72,
+      "ma200": 440.97,
+      "rsi": 49.5,
+      "macd_above_signal": false,
+      "atr": 17.48,
+      "atr_mult": 2.0,
+      "volume_vs_avg": 0.71,
+      "resistance_20d": 559.15,
+      "support_20d": 504.96,
+      "score": 70,
+      "action": "持有 / 观望偏多",
+      "action_note": "趋势偏多, 有持仓可持有, 没持仓等回调或突破再看",
+      "stop_price": 488.04,
+      "target_price": 575.44,
+      "position_pct_max": 10,
+      "reasons": [
+        "收盘在 MA200 之上 (+25): 长期趋势向上",
+        "收盘在 MA50 之上 (+15): 中期趋势向上",
+        "收盘在 MA20 之下 (+0): 短期走弱",
+        "均线多头排列 MA20>MA50>MA200 (+15)",
+        "MACD 在信号线之下 (+0): 短期动量向下",
+        "RSI 49, 在 40-70 健康区间 (+10)",
+        "今日成交量不大 (+0)",
+        "收盘离 MA50 不超过 2 倍 ATR (+5): 不算追得太远"
+      ],
+      "if_wrong": "如果收盘跌破止损 488.04, 按计划离场, 不要死扛; 如果突破 20 日高点 559.15, 趋势可能转强, 再重新评估.",
+      "ticker": "MSFT",
+      "name": "微软",
+      "type": "mega",
+      "currency": "USD",
+      "is_holding": false,
+      "source": "tiger",
+      "earnings": {
+        "date": "2027-01-28",
+        "days_away": 76,
+        "warn": false
+      },
+      "news": [
+        {
+          "title": "Bill Ackman says Microsoft's position is 'really, really strong' as Anthropic pushes into enterprise software",
+          "date": "2026-11-12"
+        },
+        {
+          "title": "Why Bill Ackman sees value in Microsoft",
+          "date": "2026-11-12"
+        },
+        {
+          "title": "Microsoft outage disrupts Outlook, Teams, and Copilot for users 'in any region'",
+          "date": "2026-11-12"
+        }
+      ],
+      "score_change": -10
+    },
+    {
+      "date": "2026-11-12",
+      "close": 364.36,
+      "ma20": 330.05,
+      "ma50": 345.59,
+      "ma200": 367.34,
+      "rsi": 61.7,
+      "macd_above_signal": true,
+      "atr": 19.09,
+      "atr_mult": 2.5,
+      "volume_vs_avg": 1.63,
+      "resistance_20d": 369.82,
+      "support_20d": 289.77,
+      "score": 60,
+      "action": "持有 / 观望偏多",
+      "action_note": "趋势偏多, 有持仓可持有, 没持仓等回调或突破再看",
+      "stop_price": 316.64,
+      "target_price": 435.94,
+      "position_pct_max": 10,
+      "reasons": [
+        "收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项",
+        "收盘在 MA50 之上 (+15): 中期趋势向上",
+        "收盘在 MA20 之上 (+10): 短期趋势向上",
+        "均线不是多头排列 (+0)",
+        "MACD 在信号线之上 (+10): 短期动量向上",
+        "RSI 62, 在 40-70 健康区间 (+10)",
+        "今日成交量大于 20 日均量 (+10): 有资金关注",
+        "收盘离 MA50 不超过 2 倍 ATR (+5): 不算追得太远"
+      ],
+      "if_wrong": "如果收盘跌破止损 316.64, 按计划离场, 不要死扛; 如果突破 20 日高点 369.82, 趋势可能转强, 再重新评估.",
+      "ticker": "AVGO",
+      "name": "博通",
+      "type": "chip",
+      "currency": "USD",
+      "is_holding": false,
+      "source": "tiger",
+      "earnings": {
+        "date": "2026-12-10",
+        "days_away": 27,
+        "warn": false
+      },
+      "news": [
+        {
+          "title": "AMD, Broadcom stocks jump as Nvidia CEO Jensen Huang resigns",
+          "date": "2026-11-12"
+        },
+        {
+          "title": "5 Best Growth Stocks for the Next 5 Years",
+          "date": "2026-11-12"
+        },
+        {
+          "title": "Can Huang's Exit Create Chip Competition",
+          "date": "2026-11-12"
+        }
+      ],
+      "score_change": 15
+    },
+    {
+      "date": "2026-11-12",
+      "close": 405.49,
+      "ma20": 409.55,
+      "ma50": 430.48,
+      "ma200": 402.76,
+      "rsi": 46.5,
+      "macd_above_signal": true,
+      "atr": 18.66,
+      "atr_mult": 2.5,
+      "volume_vs_avg": 0.77,
+      "resistance_20d": 440.88,
+      "support_20d": 351.19,
+      "score": 50,
+      "action": "观望",
+      "action_note": "方向不明, 今天无操作, 等趋势走出来",
+      "stop_price": 358.84,
+      "target_price": 475.47,
+      "position_pct_max": 0,
+      "reasons": [
+        "收盘在 MA200 之上 (+25): 长期趋势向上",
+        "收盘在 MA50 之下 (+0): 中期趋势向下",
+        "收盘在 MA20 之下 (+0): 短期走弱",
+        "均线不是多头排列 (+0)",
+        "MACD 在信号线之上 (+10): 短期动量向上",
+        "RSI 47, 在 40-70 健康区间 (+10)",
+        "今日成交量不大 (+0)",
+        "收盘离 MA50 不超过 2 倍 ATR (+5): 不算追得太远"
+      ],
+      "if_wrong": "如果收盘跌破止损 358.84, 按计划离场, 不要死扛; 如果突破 20 日高点 440.88, 趋势可能转强, 再重新评估.",
+      "ticker": "TSM",
+      "name": "台积电",
+      "type": "chip",
+      "currency": "USD",
+      "is_holding": false,
+      "source": "tiger",
+      "earnings": {
+        "date": "2027-01-14",
+        "days_away": 62,
+        "warn": false
+      },
+      "news": [
+        {
+          "title": "Bernstein’s Mark Li Raised His Taiwan Semiconductor Manufacturing (TSM) Target to $600. Here’s What Changed",
+          "date": "2026-11-12"
+        },
+        {
+          "title": "Here’s Why Bernstein’s Mark Li Is Raising His Price Target on TSMC (TSM) to $600",
+          "date": "2026-11-12"
+        },
+        {
+          "title": "Prediction: $500 a Month Invested in Taiwan Semiconductor Manufacturing Will Be Worth This Much by 2030",
+          "date": "2026-11-12"
+        }
+      ],
+      "score_change": 0
+    },
+    {
+      "date": "2026-11-12",
+      "close": 127.11,
+      "ma20": 126.74,
+      "ma50": 137.24,
+      "ma200": 154.33,
+      "rsi": 50.6,
+      "macd_above_signal": true,
+      "atr": 9.31,
+      "atr_mult": 2.0,
+      "volume_vs_avg": 0.53,
+      "resistance_20d": 148.48,
+      "support_20d": 109.21,
+      "score": 35,
+      "action": "偏弱 / 回避",
+      "action_note": "趋势偏弱, 不要新开仓",
+      "stop_price": 108.49,
+      "target_price": 155.04,
+      "position_pct_max": 0,
+      "reasons": [
+        "收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项",
+        "收盘在 MA50 之下 (+0): 中期趋势向下",
+        "收盘在 MA20 之上 (+10): 短期趋势向上",
+        "均线不是多头排列 (+0)",
+        "MACD 在信号线之上 (+10): 短期动量向上",
+        "RSI 51, 在 40-70 健康区间 (+10)",
+        "今日成交量不大 (+0)",
+        "收盘离 MA50 不超过 2 倍 ATR (+5): 不算追得太远"
+      ],
+      "if_wrong": "如果收盘跌破止损 108.49, 按计划离场, 不要死扛; 如果突破 20 日高点 148.48, 趋势可能转强, 再重新评估.",
+      "ticker": "ORCL",
+      "name": "甲骨文",
+      "type": "mega",
+      "currency": "USD",
+      "is_holding": false,
+      "source": "tiger",
+      "earnings": {
+        "date": "2026-12-15",
+        "days_away": 32,
+        "warn": false
+      },
+      "news": [
+        {
+          "title": "5 Best AI Stocks to Buy After Wells Fargo’s Outlook Upgrade",
+          "date": "2026-11-12"
+        },
+        {
+          "title": "Cerebras Adds Microsoft Partnership to Diversify Beyond OpenAI",
+          "date": "2026-11-12"
+        },
+        {
+          "title": "AI Chipmaker Cerebras Tops Q3 Views, Adds Big Customers",
+          "date": "2026-11-12"
+        }
+      ],
+      "score_change": 10
+    },
+    {
+      "date": "2026-11-12",
+      "close": 798.44,
+      "ma20": 843.03,
+      "ma50": 947.37,
+      "ma200": 763.89,
+      "rsi": 44.0,
+      "macd_above_signal": false,
+      "atr": 64.15,
+      "atr_mult": 2.5,
+      "volume_vs_avg": 0.89,
+      "resistance_20d": 990.0,
+      "support_20d": 650.0,
+      "score": 35,
+      "action": "偏弱 / 回避",
+      "action_note": "趋势偏弱, 不要新开仓",
+      "stop_price": 638.07,
+      "target_price": 1039.0,
+      "position_pct_max": 0,
+      "reasons": [
+        "收盘在 MA200 之上 (+25): 长期趋势向上",
+        "收盘在 MA50 之下 (+0): 中期趋势向下",
+        "收盘在 MA20 之下 (+0): 短期走弱",
+        "均线不是多头排列 (+0)",
+        "MACD 在信号线之下 (+0): 短期动量向下",
+        "RSI 44, 在 40-70 健康区间 (+10)",
+        "今日成交量不大 (+0)",
+        "收盘离 MA50 太远 (+0): 追高回调风险大"
+      ],
+      "if_wrong": "如果收盘跌破止损 638.07, 按计划离场, 不要死扛; 如果突破 20 日高点 990.0, 趋势可能转强, 再重新评估.",
+      "ticker": "MU",
+      "name": "美光科技",
+      "type": "chip",
+      "currency": "USD",
+      "is_holding": false,
+      "source": "tiger",
+      "earnings": {
+        "date": "2026-12-24",
+        "days_away": 41,
+        "warn": false
+      },
+      "news": [
+        {
+          "title": "5 Best Growth Stocks for the Next 5 Years",
+          "date": "2026-11-12"
+        },
+        {
+          "title": "5 Unrivaled Stocks to Buy for the Next Decade",
+          "date": "2026-11-12"
+        },
+        {
+          "title": "Micron, Other Memory Chip Stocks Fall on Nvidia Shakeup. Why They’re at Risk.",
+          "date": "2026-11-12"
+        }
+      ],
+      "score_change": -10
+    },
+    {
+      "date": "2026-11-13",
+      "close": 1313000.0,
+      "ma20": 1309750.0,
+      "ma50": 1546400.0,
+      "ma200": 1519895.0,
+      "rsi": 51.9,
+      "macd_above_signal": true,
+      "atr": 115500.0,
+      "atr_mult": 2.5,
+      "volume_vs_avg": 0.1,
+      "resistance_20d": 1587000.0,
+      "support_20d": 1089000.0,
+      "score": 30,
+      "action": "偏弱 / 回避",
+      "action_note": "趋势偏弱, 不要新开仓",
+      "stop_price": 1024250.0,
+      "target_price": 1746125.0,
+      "position_pct_max": 0,
+      "reasons": [
+        "收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项",
+        "收盘在 MA50 之下 (+0): 中期趋势向下",
+        "收盘在 MA20 之上 (+10): 短期趋势向上",
+        "均线不是多头排列 (+0)",
+        "MACD 在信号线之上 (+10): 短期动量向上",
+        "RSI 52, 在 40-70 健康区间 (+10)",
+        "今日成交量不大 (+0)",
+        "收盘离 MA50 太远 (+0): 追高回调风险大"
+      ],
+      "if_wrong": "如果收盘跌破止损 1024250.0, 按计划离场, 不要死扛; 如果突破 20 日高点 1587000.0, 趋势可能转强, 再重新评估.",
+      "ticker": "000660.KS",
+      "name": "海力士",
+      "type": "chip",
+      "currency": "KRW",
+      "is_holding": false,
+      "source": "yfinance",
+      "earnings": null,
+      "news": [],
+      "score_change": 20
+    },
+    {
+      "date": "2026-11-12",
+      "close": 623.61,
+      "ma20": 640.44,
+      "ma50": 679.19,
+      "ma200": 631.25,
+      "rsi": 44.1,
+      "macd_above_signal": true,
+      "atr": 20.93,
+      "atr_mult": 2.0,
+      "volume_vs_avg": 0.43,
+      "resistance_20d": 738.49,
+      "support_20d": 583.8,
+      "score": 20,
+      "action": "回避 / 卖出信号",
+      "action_note": "趋势向下, 有持仓要按止损处理, 没持仓不要碰",
+      "stop_price": 581.75,
+      "target_price": 686.4,
+      "position_pct_max": 0,
+      "reasons": [
+        "收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项",
+        "收盘在 MA50 之下 (+0): 中期趋势向下",
+        "收盘在 MA20 之下 (+0): 短期走弱",
+        "均线不是多头排列 (+0)",
+        "MACD 在信号线之上 (+10): 短期动量向上",
+        "RSI 44, 在 40-70 健康区间 (+10)",
+        "今日成交量不大 (+0)",
+        "收盘离 MA50 太远 (+0): 追高回调风险大"
+      ],
+      "if_wrong": "如果收盘跌破止损 581.75, 按计划离场, 不要死扛; 如果突破 20 日高点 738.49, 趋势可能转强, 再重新评估.",
+      "ticker": "META",
+      "name": "Meta",
+      "type": "mega",
+      "currency": "USD",
+      "is_holding": false,
+      "source": "tiger",
+      "earnings": {
+        "date": "2027-01-28",
+        "days_away": 76,
+        "warn": false
+      },
+      "news": [
+        {
+          "title": "Anthropic’s $500 Billion Question",
+          "date": "2026-11-12"
+        },
+        {
+          "title": "Musk: SpaceX Makes Compute “Actually Usable” in 2 Months, 3x Faster than Rivals",
+          "date": "2026-11-12"
+        },
+        {
+          "title": "What ERock (EROC) Said on Its Q3 Earnings Call",
+          "date": "2026-11-12"
+        }
+      ],
+      "score_change": 0
+    },
+    {
+      "date": "2026-11-12",
+      "close": 94.36,
+      "ma20": 102.99,
+      "ma50": 107.22,
+      "ma200": 123.19,
+      "rsi": 42.0,
+      "macd_above_signal": false,
+      "atr": 3.6,
+      "atr_mult": 2.5,
+      "volume_vs_avg": 2.49,
+      "resistance_20d": 112.17,
+      "support_20d": 93.42,
+      "score": 20,
+      "action": "回避 / 卖出信号",
+      "action_note": "趋势向下, 有持仓要按止损处理, 没持仓不要碰",
+      "stop_price": 85.37,
+      "target_price": 107.84,
+      "position_pct_max": 0,
+      "reasons": [
+        "收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项",
+        "收盘在 MA50 之下 (+0): 中期趋势向下",
+        "收盘在 MA20 之下 (+0): 短期走弱",
+        "均线不是多头排列 (+0)",
+        "MACD 在信号线之下 (+0): 短期动量向下",
+        "RSI 42, 在 40-70 健康区间 (+10)",
+        "今日成交量大于 20 日均量 (+10): 有资金关注",
+        "收盘离 MA50 太远 (+0): 追高回调风险大"
+      ],
+      "if_wrong": "如果收盘跌破止损 85.37, 按计划离场, 不要死扛; 如果突破 20 日高点 112.17, 趋势可能转强, 再重新评估.",
+      "ticker": "BABA",
+      "name": "阿里巴巴",
+      "type": "china_adr",
+      "currency": "USD",
+      "is_holding": false,
+      "source": "tiger",
+      "earnings": {
+        "date": "2026-11-19",
+        "days_away": 6,
+        "warn": true
+      },
+      "news": [
+        {
+          "title": "5 Best AI Stocks to Buy After Wells Fargo’s Outlook Upgrade",
+          "date": "2026-11-12"
+        },
+        {
+          "title": "Why Jensen Huang’s Exit Is Bad News for Alibaba and China",
+          "date": "2026-11-12"
+        },
+        {
+          "title": "Wall Street ends lower as Nvidia CEO resigns; US yields up",
+          "date": "2026-11-12"
+        }
+      ],
+      "score_change": -5
+    },
+    {
+      "date": "2026-11-12",
+      "close": 298.7,
+      "ma20": 305.66,
+      "ma50": 329.12,
+      "ma200": 338.69,
+      "rsi": 38.2,
+      "macd_above_signal": true,
+      "atr": 11.43,
+      "atr_mult": 2.0,
+      "volume_vs_avg": 0.87,
+      "resistance_20d": 350.66,
+      "support_20d": 276.92,
+      "score": 10,
+      "action": "回避 / 卖出信号",
+      "action_note": "趋势向下, 有持仓要按止损处理, 没持仓不要碰",
+      "stop_price": 275.83,
+      "target_price": 333.0,
+      "position_pct_max": 0,
+      "reasons": [
+        "收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项",
+        "收盘在 MA50 之下 (+0): 中期趋势向下",
+        "收盘在 MA20 之下 (+0): 短期走弱",
+        "均线不是多头排列 (+0)",
+        "MACD 在信号线之上 (+10): 短期动量向上",
+        "RSI 38, 不在健康区间 (+0)",
+        "今日成交量不大 (+0)",
+        "收盘离 MA50 太远 (+0): 追高回调风险大"
+      ],
+      "if_wrong": "如果收盘跌破止损 275.83, 按计划离场, 不要死扛; 如果突破 20 日高点 350.66, 趋势可能转强, 再重新评估.",
+      "ticker": "GOOGL",
+      "name": "谷歌",
+      "type": "mega",
+      "currency": "USD",
+      "is_holding": false,
+      "source": "tiger",
+      "earnings": null,
+      "news": [
+        {
+          "title": "TeraWulf Stock Fell 24% in a Month. Lucid Capital Still Sees 67% Upside",
+          "date": "2026-11-13"
+        },
+        {
+          "title": "Your Customers Are Asking AI About Your Company. Here’s How to Audit What It Says.",
+          "date": "2026-11-13"
+        },
+        {
+          "title": "Alphabet Draws $5 Billion in Orders as AI Frenzy Builds",
+          "date": "2026-11-12"
+        }
+      ],
+      "score_change": 10
+    },
+    {
+      "date": "2026-11-12",
+      "close": 166.19,
+      "ma20": 201.25,
+      "ma50": 215.96,
+      "ma200": 204.34,
+      "rsi": 24.5,
+      "macd_above_signal": false,
+      "atr": 10.66,
+      "atr_mult": 2.5,
+      "volume_vs_avg": 3.8,
+      "resistance_20d": 222.19,
+      "support_20d": 148.8,
+      "score": 10,
+      "action": "回避 / 卖出信号",
+      "action_note": "趋势向下, 有持仓要按止损处理, 没持仓不要碰",
+      "stop_price": 139.54,
+      "target_price": 206.17,
+      "position_pct_max": 0,
+      "reasons": [
+        "收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项",
+        "收盘在 MA50 之下 (+0): 中期趋势向下",
+        "收盘在 MA20 之下 (+0): 短期走弱",
+        "均线不是多头排列 (+0)",
+        "MACD 在信号线之下 (+0): 短期动量向下",
+        "RSI 24, 低于 30 超卖, 不加分, 跌势中不要抄底",
+        "今日成交量大于 20 日均量 (+10): 有资金关注",
+        "收盘离 MA50 太远 (+0): 追高回调风险大"
+      ],
+      "if_wrong": "如果收盘跌破止损 139.54, 按计划离场, 不要死扛; 如果突破 20 日高点 222.19, 趋势可能转强, 再重新评估.",
+      "ticker": "NVDA",
+      "name": "英伟达",
+      "type": "chip",
+      "currency": "USD",
+      "is_holding": false,
+      "source": "tiger",
+      "earnings": {
+        "date": "2026-11-17",
+        "days_away": 4,
+        "warn": true
+      },
+      "news": [
+        {
+          "title": "Nvidia market cap plunges $490 billion following former CEO Huang's affair scandals",
+          "date": "2026-11-12"
+        },
+        {
+          "title": "How Nvidia's stock decline might impact your 401(k) and portfolio",
+          "date": "2026-11-12"
+        },
+        {
+          "title": "Alleged spy at center of Nvidia CEO affair reportedly being probed over Super Micro smuggling effort",
+          "date": "2026-11-12"
+        }
+      ],
+      "score_change": 0
+    },
+    {
+      "date": "2026-11-12",
+      "close": 61.2,
+      "ma20": 75.25,
+      "ma50": 95.61,
+      "ma200": 87.34,
+      "rsi": 30.8,
+      "macd_above_signal": false,
+      "atr": 6.31,
+      "atr_mult": 2.5,
+      "volume_vs_avg": 0.55,
+      "resistance_20d": 95.68,
+      "support_20d": 51.51,
+      "score": 0,
+      "action": "回避 / 卖出信号",
+      "action_note": "趋势向下, 有持仓要按止损处理, 没持仓不要碰",
+      "stop_price": 45.42,
+      "target_price": 84.87,
+      "position_pct_max": 0,
+      "reasons": [
+        "收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项",
+        "收盘在 MA50 之下 (+0): 中期趋势向下",
+        "收盘在 MA20 之下 (+0): 短期走弱",
+        "均线不是多头排列 (+0)",
+        "MACD 在信号线之下 (+0): 短期动量向下",
+        "RSI 31, 不在健康区间 (+0)",
+        "今日成交量不大 (+0)",
+        "收盘离 MA50 太远 (+0): 追高回调风险大"
+      ],
+      "if_wrong": "如果收盘跌破止损 45.42, 按计划离场, 不要死扛; 如果突破 20 日高点 95.68, 趋势可能转强, 再重新评估.",
+      "ticker": "INTC",
+      "name": "英特尔",
+      "type": "chip",
+      "currency": "USD",
+      "is_holding": false,
+      "source": "tiger",
+      "earnings": {
+        "date": "2027-01-29",
+        "days_away": 77,
+        "warn": false
+      },
+      "news": [
+        {
+          "title": "Intel CEO Lip-Bu Tan on turnaround efforts amid stock slump: 'I feel called to do this'",
+          "date": "2026-11-12"
+        },
+        {
+          "title": "Intel CEO Lip-Bu Tan sees a 'healthy pullback' ahead in the AI boom",
+          "date": "2026-11-12"
+        },
+        {
+          "title": "Why Are Advanced Micro Devices (AMD) Shares Drawing Fresh AI Attention?",
+          "date": "2026-11-12"
+        }
+      ],
+      "score_change": 0
+    }
+  ]
+}
