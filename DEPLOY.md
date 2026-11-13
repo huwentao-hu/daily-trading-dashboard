@@ -73,17 +73,22 @@ git push -u origin main
 
 ```bash
 # 1. 在交易系统里跑今天的分析 (在我这里, 或在你自己电脑上)
-python daily_analysis.py --source tiger
+# 注意: 必须用项目里的 .venv, 系统自带的 python3 没有装 yfinance/tigeropen,
+# 直接跑会报 No module named 'yfinance'
+cd quant-trading-system
+.venv/bin/python daily_analysis.py --source tiger
 # 得到 reports/daily_analysis_2026-11-13.json
 
 # 2. 把新的数据文件复制成 data.json, 重新生成网站
+# build_site.py 会读 data.json + muse-export.html (版式模板) 生成 index.html,
+# 总览/大盘/筛选数字都是跟着 data.json 动态算的, 不用手改页面
 cp reports/daily_analysis_2026-11-13.json github-cloudflare-dashboard/data.json
 cd github-cloudflare-dashboard
 python3 build_site.py
 # 检查一下 index.html, 确认日期和分数对了
 
 # 3. 推到 GitHub, Cloudflare 会自动重新部署 (约 1 分钟)
-git add data.json index.html
+git add data.json index.html build_site.py
 git commit -m "每日分析 2026-11-13"
 git push
 ```

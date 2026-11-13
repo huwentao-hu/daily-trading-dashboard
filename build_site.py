@@ -181,6 +181,8 @@ if not focus:
     out = out.replace('  <div class="market">', banner, 1)
 
 # 页脚加生成时间, 打开页面就知道数据是哪天几点生成的
+sub(r'价格为 \d{4}-\d{2}-\d{2} 收盘数据',
+    f'价格为 {esc(data["date"])} 收盘数据', "页脚收盘日期")
 sub(r'单只仓位上限 20%，本页已按评分给出每只上限。',
     f'单只仓位上限 20%，本页已按评分给出每只上限。<br>'
     f'<b>页面生成时间：</b>{now_bj}（北京时间）· 数据日期 {esc(data["date"])} · 数据源 {esc(data.get("source", ""))}。',

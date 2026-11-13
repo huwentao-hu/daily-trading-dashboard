@@ -1,19 +1,19 @@
 # 每日持仓分析看板 — GitHub + Cloudflare 版
 
-数据日期: 2026-11-12 (最后一个完整交易日)
-现在持仓: 0 只, 只有理财资产
 策略: 趋势跟踪, 按类型分, 打分 0-100, 不下单
+现在持仓: 0 只, 只有理财资产 (持仓有变化时更新 `holdings.yaml` 的记录, 这里只看自选股)
 
-## 今天的结论
+今天的结论、分数、止损/目标都在 `index.html` 和 `data.json` 里, 打开页面就能看到,
+不要以这个 README 里写的某一天数字为准, 它只在写的那天是对的。
 
-- 关注 / 可分批 (3 只): AAPL 90 分, AMZN 90 分, AMD 85 分
-- 持有 / 观望偏多: MSFT 70 分 (昨天 80 分, 跌出关注线), AVGO 60 分
-- 观望: TSM 50 分
-- 回避: GOOGL、INTC、NVDA、META、BABA 等
-- 大盘: SPY 40 分, QQQ 40 分, 观望
+## 文件说明 (都在仓库根目录)
 
-详细数据在 `data.json`, 页面在 `index.html`。
+- `index.html` — 网站页面, 由 `build_site.py` 生成, 不要手改, 改了下次生成会被覆盖
+- `data.json` — 当日分析的原始数据 (分数、收盘、止损、目标、新闻、财报)
+- `build_site.py` — 生成脚本, 透明可读: 读 `data.json` + `muse-export.html` 模板 → 生成 `index.html`
+- `muse-export.html` — 版式模板, 就是 Muse 空间里那个看板的原版样式 (CSS / 卡片布局 / 筛选排序)
+- `DEPLOY.md` — 部署和每天更新的步骤
 
 ## 怎么更新
 
-见 `DEPLOY.md` 每天更新一节: 换 `data.json` → `python3 build_site.py` → `git push`。
+见 `DEPLOY.md` 每天更新一节: 跑分析 → 换 `data.json` → `python3 build_site.py` → `git push`, Cloudflare 自动重新部署。
