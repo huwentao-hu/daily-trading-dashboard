@@ -1,265 +1,235 @@
-<!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>每日持仓分析 2026-11-12</title>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:,">
+<title>每日持仓分析看板</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
 <style>
-body{font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;max-width:960px;margin:0 auto;padding:24px 16px 48px;line-height:1.6;color:#111827;background:#f8fafc}
-header{background:#111827;color:#fff;border-radius:16px;padding:20px 24px;margin-bottom:16px}
-header h1{margin:0;font-size:26px} header p{margin:6px 0 0;color:#d1d5db}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
-.stat{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:12px;text-align:center}
-.stat b{font-size:24px;display:block} .stat span{color:#6b7280;font-size:13px}
-.card{background:#fff;border:1px solid #e5e7eb;border-left:5px solid #9ca3af;border-radius:12px;padding:14px 16px;margin:12px 0}
-.card.watch{border-left-color:#16a34a} .card.hold{border-left-color:#ca8a04} .card.avoid{border-left-color:#dc2626}
-.score{color:#fff;padding:3px 10px;border-radius:999px;font-weight:700;white-space:nowrap}
-.badge-green{background:#16a34a} .badge-amber{background:#ca8a04} .badge-red{background:#dc2626} .badge-grey{background:#6b7280}
-.ticker{font-size:18px;font-weight:700} .action{font-weight:600}
-.meta{display:block;color:#374151;margin-top:6px;font-size:14px}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:#f9fafb;border-radius:8px;padding:10px;font-size:13px;margin:10px 0}
-button{padding:7px 14px;margin:4px;border-radius:999px;border:1px solid #d1d5db;background:#fff;cursor:pointer}
-button.active{background:#111827;color:#fff;border-color:#111827}
-input{padding:8px 12px;width:240px;border:1px solid #d1d5db;border-radius:999px}
-h1{font-size:24px} summary{cursor:pointer;list-style:none} summary::-webkit-details-marker{display:none}
-@media(max-width:640px){.stats{grid-template-columns:repeat(2,1fr)} .grid{grid-template-columns:repeat(2,1fr)}}
-</style></head><body>
-<header><h1>每日持仓分析 2026-11-12</h1>
-<p>数据源: tiger | 现在持仓: 0 只 | 策略: 趋势跟踪, 按类型分, 打分制 | 不下单</p>
-<p>大盘: SPY 40分, QQQ 40分 — 观望, 不是强势, 新开仓要谨慎。</p></header>
-<div class="stats">
-<div class="stat"><b>3</b><span>关注 / 可分批</span></div>
-<div class="stat"><b>3</b><span>观望 / 持有偏多</span></div>
-<div class="stat"><b>8</b><span>回避</span></div>
-<div class="stat"><b>14</b><span>自选股总数</span></div>
+:root{
+  --bg:#f6f7f5; --surface:#ffffff; --surface2:#eef1ee; --line:#dde3dd;
+  --text:#101613; --muted:#6b7570; --muted2:#8a948e;
+  --green:#0a7a42; --green-bg:#e6f4ec; --red:#c81e2b; --red-bg:#fdecec;
+  --amber:#9a6a00; --amber-bg:#fff3cd; --orange:#b45309; --slate:#475569;
+  --radius:16px;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0f1411; --surface:#171d19; --surface2:#1f2822; --line:#2a352d; --text:#eef2ee; --muted:#9aa8a0; --muted2:#7d8a81; --green-bg:#143626; --red-bg:#3a171a; --amber-bg:#332a10; }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans SC",system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.5}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:18px 16px 40px}
+.topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.date{font-size:13px;color:var(--muted);letter-spacing:.02em}
+h1{font-size:28px;line-height:1.1;margin:4px 0 6px;font-weight:900;letter-spacing:-.02em}
+.subtitle{color:var(--muted);font-size:14px;max-width:620px}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:700;border:1px solid var(--line);background:var(--surface)}
+.badge.warn{background:var(--amber-bg);color:var(--amber);border-color:transparent}
+.market{display:grid;grid-template-columns:1.2fr .8fr;gap:14px;margin-top:18px}
+@media(max-width:760px){.market{grid-template-columns:1fr} h1{font-size:24px}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px}
+.panel h2{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.conclusion{font-size:18px;font-weight:800;line-height:1.35}
+.conclusion span{color:var(--green)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+@media(max-width:640px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px}
+.kpi b{font-size:26px;display:block;line-height:1}
+.kpi span{font-size:12px;color:var(--muted)}
+.kpi.green b{color:var(--green)} .kpi.red b{color:var(--red)} .kpi.amber b{color:var(--orange)}
+.spy{display:flex;gap:10px}
+.spybox{flex:1;background:var(--surface2);border-radius:12px;padding:12px;text-align:center}
+.spybox strong{font-size:22px;display:block}
+.progress{height:6px;background:var(--line);border-radius:999px;overflow:hidden;margin-top:8px}
+.progress i{display:block;height:100%;background:#334155}
+.controls{position:sticky;top:0;z-index:20;background:var(--bg);padding:14px 0 10px;margin-top:8px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{min-height:38px;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-weight:700;font-size:13px;cursor:pointer}
+.chip.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+.select{min-height:38px;border-radius:999px;border:1px solid var(--line);background:var(--surface);padding:0 12px;font-weight:600}
+.search{flex:1;min-width:160px;min-height:38px;border-radius:999px;border:1px solid var(--line);background:var(--surface);padding:0 14px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:6px}
+@media(max-width:980px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.grid{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column}
+.card-head{display:flex;justify-content:space-between;gap:12px}
+.ticker{font-family:"JetBrains Mono",monospace;font-weight:800;font-size:18px;letter-spacing:-.02em}
+.name{color:var(--muted);font-size:13px}
+.score{text-align:right}
+.score-num{font-size:32px;font-weight:900;line-height:1}
+.score-label{font-size:11px;color:var(--muted);letter-spacing:.06em}
+.bar{height:7px;background:var(--surface2);border-radius:999px;overflow:hidden;margin:10px 0}
+.bar i{display:block;height:100%}
+.tag{display:inline-flex;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:800}
+.tag.green{background:var(--green-bg);color:var(--green)} .tag.red{background:var(--red-bg);color:var(--red)} .tag.amber{background:var(--amber-bg);color:var(--amber)} .tag.gray{background:var(--surface2);color:var(--slate)}
+.price-row{display:flex;justify-content:space-between;align-items:end;margin:8px 0 4px}
+.price{font-size:20px;font-weight:800;font-family:"JetBrains Mono",monospace}
+.change{font-size:12px;font-weight:700;padding:3px 7px;border-radius:999px}
+.change.up{background:var(--green-bg);color:var(--green)} .change.down{background:var(--red-bg);color:var(--red)} .change.flat{background:var(--surface2);color:var(--muted)}
+.metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}
+.metric{background:var(--surface2);border-radius:10px;padding:8px}
+.metric span{font-size:11px;color:var(--muted);display:block}
+.metric b{font-size:13px;font-family:"JetBrains Mono",monospace}
+.levels{display:flex;gap:8px;margin-top:10px;font-size:12px}
+.levels div{flex:1;border:1px dashed var(--line);border-radius:10px;padding:8px}
+.levels b{display:block;font-size:13px}
+.stop{color:var(--red)} .target{color:var(--green)}
+.earn{margin-top:10px;font-size:12px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.earn.warn{color:var(--orange);font-weight:700}
+.news{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
+.news h5{margin:0 0 6px;font-size:12px;color:var(--muted);font-weight:700}
+.news ul{margin:0;padding:0;list-style:none}
+.news li{font-size:12px;line-height:1.45;margin:0 0 5px;display:flex;gap:6px;align-items:baseline}
+.news li time{flex-shrink:0;font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--muted2)}
+.news .none{font-size:12px;color:var(--muted)}
+.details-btn{margin-top:12px;width:100%;min-height:40px;border-radius:10px;border:1px solid var(--line);background:transparent;font-weight:700;cursor:pointer}
+.details{display:none;margin-top:12px;border-top:1px solid var(--line);padding-top:12px;font-size:13px}
+.details.open{display:block}
+.details h4{margin:10px 0 6px;font-size:13px}
+.details ul{margin:0;padding-left:18px;color:#2b332e}
+@media(prefers-color-scheme:dark){.details ul{color:#cbd5cb}}
+.details p{margin:6px 0;color:var(--muted)}
+.glossary{margin-top:22px}
+.glossary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(max-width:700px){.glossary-grid{grid-template-columns:1fr}}
+.gloss{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
+.gloss b{font-size:14px}
+.gloss p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.footer{margin-top:20px;font-size:12px;color:var(--muted);line-height:1.7;border-top:1px solid var(--line);padding-top:14px}
+.spacex{margin-top:14px}
+.empty{padding:28px;text-align:center;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div>
+      <div class="date">数据日期 · 2026-11-12（最后一个完整交易日） · 美股收盘后分析</div>
+      <h1>每日持仓分析看板</h1>
+      <p class="subtitle">督促执行趋势策略，不下单。当前持仓 <b>0 只</b>，只看自选股信号。每只给出：持有 / 止损在 X / 目标 Y / 仓位上限，并写明如果错了怎么办。</p>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <span class="badge">持仓 0 只 · 空仓观察</span>
+      <span class="badge warn">⚠ 2 只 7 天内财报</span>
+    </div>
+  </div>
+
+  <div class="market">
+    <section class="panel">
+      <h2>今日总览</h2>
+      <div class="conclusion">关注 <span>3 只可分批</span>，其余观望或回避。<br>大盘同为 40 分观望，新开仓保持谨慎。</div>
+      <div class="kpis">
+        <div class="kpi green"><b>3</b><span>关注 / 可分批<br>AAPL · AMZN · AMD</span></div>
+        <div class="kpi amber"><b>3</b><span>观望偏多 / 观望<br>MSFT · AVGO · TSM</span></div>
+        <div class="kpi red"><b>8</b><span>偏弱 / 回避<br>ORCL 起共 8 只</span></div>
+        <div class="kpi"><b>14</b><span>自动分析总数<br>+ SpaceX 手动关注</span></div>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin:12px 0 0">结论口径：评分 ≥75 关注，50–74 观望偏多/观望，&lt;40 偏弱或回避。大盘低于 40 分时仓位减半——今天正好卡在 40 分，不追高。</p>
+    </section>
+    <section class="panel">
+      <h2>大盘环境 · 趋势过滤</h2>
+      <div class="spy">
+        <div class="spybox"><span style="font-size:12px;color:var(--muted)">SPY 标普500</span><strong>40 分</strong><span class="tag gray">观望</span><div class="progress"><i style="width:40%"></i></div></div>
+        <div class="spybox"><span style="font-size:12px;color:var(--muted)">QQQ 纳指100</span><strong>40 分</strong><span class="tag gray">观望</span><div class="progress"><i style="width:40%"></i></div></div>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin:12px 0 0">大盘不强，个股再强也只适合分批。财报临近：<b style="color:var(--orange)">NVDA 11-17（4天后）、BABA 11-19（6天后）</b>，财报前不新开这两只。</p>
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><span class="badge">策略：趋势跟踪 · 按类型分</span><span class="badge">止损：活止损 · ATR 动态</span></div>
+    </section>
+  </div>
+
+  <div class="controls">
+    <div class="filters" role="group" aria-label="筛选">
+      <button class="chip active" data-filter="all">全部 14</button>
+      <button class="chip" data-filter="focus">关注 / 可分批 3</button>
+      <button class="chip" data-filter="watch">观望类 3</button>
+      <button class="chip" data-filter="avoid">回避 / 偏弱 8</button>
+      <button class="chip" data-filter="earn">7天内财报 2</button>
+      <input class="search" id="search" type="search" placeholder="搜索代码或公司名，如 NVDA / 英伟达">
+      <select class="select" id="sort"><option value="score-desc">评分从高到低</option><option value="score-asc">评分从低到高</option><option value="change-desc">分数变化最大</option></select>
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+  <div id="empty" class="empty" style="display:none">没有符合筛选的股票，换个筛选试试。</div>
+
+  <section class="panel spacex">
+    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center">
+      <div><div class="ticker">SpaceX</div><div class="name">未上市 · 无公开股价</div></div>
+      <span class="tag gray">手动关注 · 不进自动分析</span>
+    </div>
+    <p style="color:var(--muted);font-size:13px;margin:8px 0 0">SpaceX 没有公开交易价格，无法计算 MA / RSI / ATR 和止损目标。只保留在自选名单里手动关注新闻，不生成买卖建议。</p>
+  </section>
+
+  <section class="glossary">
+    <h2 style="font-size:18px;margin:0 0 12px">术语解释 · 看不懂先看这里</h2>
+    <div class="glossary-grid">
+      <div class="gloss"><b>MA 均线（MA20 / MA50 / MA200）</b><p>过去 20 / 50 / 200 天的平均收盘价。价格在均线之上偏强，在之下偏弱。MA200 是长期趋势线，跌破要格外小心。</p></div>
+      <div class="gloss"><b>ATR 平均真实波幅</b><p>衡量一只股票每天大概波动多少。止损用 ATR 来定：波动大的股票止损放宽，波动小的放紧，所以止损是“活的”，每天会变。</p></div>
+      <div class="gloss"><b>RSI 相对强弱（0–100）</b><p>看短期涨跌动能。70 以上偏过热，30 以下偏超卖。不是越高越好——90 分股票 RSI 也可能只有 50 多，那反而更健康。</p></div>
+      <div class="gloss"><b>1.5R 目标与 R</b><p>R = 买入价 − 止损价，也就是你愿意亏的距离。目标价常设为买入价 + 1.5×R，先保证赚亏比，再谈涨多少。跌破止损就按计划走，不死扛。</p></div>
+      <div class="gloss"><b>支撑 / 阻力</b><p>支撑是下方容易止跌的价格区，阻力是上方容易遇压的价格区。接近阻力不追，跌破支撑要看止损。</p></div>
+      <div class="gloss"><b>评分 0–100 怎么来的</b><p>趋势跟踪打分：价格与均线关系、均线排列、动量、离高点距离等透明加减分。分数只代表趋势强弱，不代表公司好坏，更不是收益承诺。</p></div>
+    </div>
+  </section>
+
+  <div class="footer">
+    <b>使用说明：</b>本看板只做每日分析与纪律提醒，不下单、不自动交易。新闻标题只供鉴别，不改变评分——策略更信趋势。财报日期只显示未来财报。价格为 2026-11-12 收盘数据，海力士为韩元计价（000660.KS）。<br>
+    <b>风险提示：</b>所有“关注 / 持有 / 回避”、止损与目标价均为策略建议，不是投资承诺，也不保证盈利。执行前请结合你的真实仓位与风险承受能力自行决定。单只仓位上限 20%，本页已按评分给出每只上限。
+  </div>
 </div>
-<p><b>关注只是可分批, 不是让你全仓买入。</b> SpaceX 未上市, 手动关注。海力士价格单位是韩元 KRW。</p>
-<p>
-<button data-filter="all" class="active" onclick="filterCards('all',this)">全部 14</button>
-<button data-filter="watch" onclick="filterCards('watch',this)">关注 3</button>
-<button data-filter="hold" onclick="filterCards('hold',this)">持有/观望偏多</button>
-<button data-filter="wait" onclick="filterCards('wait',this)">观望</button>
-<button data-filter="avoid" onclick="filterCards('avoid',this)">回避</button>
-<input id="q" placeholder="搜索代码或名称, 如 AAPL / 苹果" oninput="searchCards(this.value)">
-</p>
-<div id="list">
 
-    <details class="card watch" data-score="90" data-action="关注 / 可分批">
-      <summary>
-        <span class="ticker">AAPL 苹果</span>
-        <span class="score badge-green">90分 较昨日 +0</span>
-        <span class="action">关注 / 可分批</span>
-        <span class="meta">收盘 354.88 USD &nbsp;|&nbsp; 止损 <b>335.86</b> &nbsp;|&nbsp; 目标 <b>383.41</b> &nbsp;|&nbsp; 仓位上限 20%</span>
-      </summary>
-      <div class="grid"><span>MA20 345.51</span><span>MA50 338.48</span><span>MA200 300.76</span><span>RSI 54.7</span><span>ATR 9.51</span><span>阻力 359.37</span><span>支撑 325.33</span><span>数据源 tiger</span></div>
-      <p>趋势强, 但仍建议分批, 不要一次全仓</p>
-      <ul><li>收盘在 MA200 之上 (+25): 长期趋势向上</li><li>收盘在 MA50 之上 (+15): 中期趋势向上</li><li>收盘在 MA20 之上 (+10): 短期趋势向上</li><li>均线多头排列 MA20&gt;MA50&gt;MA200 (+15)</li><li>MACD 在信号线之上 (+10): 短期动量向上</li><li>RSI 55, 在 40-70 健康区间 (+10)</li><li>今日成交量不大 (+0)</li><li>收盘离 MA50 不超过 2 倍 ATR (+5): 不算追得太远</li></ul>
-      <p><i>如果错了怎么办: 如果收盘跌破止损 335.86, 按计划离场, 不要死扛; 如果突破 20 日高点 359.37, 趋势可能转强, 再重新评估.</i></p>
-      <p>下次财报: 2027-01-29 (77 天后)</p><p>新闻 (只供鉴别, 不改变评分):</p><ul><li>2026-11-12 Jensen Huang vs. Steve Jobs: Can Nvidia also thrive without its visionary?</li><li>2026-11-12 Tony Robbins: How to make yourself irreplaceable in the AI era</li><li>2026-11-12 Tony Robbins: 4 rules the world&#x27;s greatest investors follow</li></ul>
-    </details>
-
-    <details class="card watch" data-score="90" data-action="关注 / 可分批">
-      <summary>
-        <span class="ticker">AMZN 亚马逊</span>
-        <span class="score badge-green">90分 较昨日 +0</span>
-        <span class="action">关注 / 可分批</span>
-        <span class="meta">收盘 267.44 USD &nbsp;|&nbsp; 止损 <b>246.32</b> &nbsp;|&nbsp; 目标 <b>299.12</b> &nbsp;|&nbsp; 仓位上限 20%</span>
-      </summary>
-      <div class="grid"><span>MA20 256.5</span><span>MA50 254.66</span><span>MA200 244.47</span><span>RSI 63.7</span><span>ATR 10.56</span><span>阻力 275.34</span><span>支撑 229.36</span><span>数据源 tiger</span></div>
-      <p>趋势强, 但仍建议分批, 不要一次全仓</p>
-      <ul><li>收盘在 MA200 之上 (+25): 长期趋势向上</li><li>收盘在 MA50 之上 (+15): 中期趋势向上</li><li>收盘在 MA20 之上 (+10): 短期趋势向上</li><li>均线多头排列 MA20&gt;MA50&gt;MA200 (+15)</li><li>MACD 在信号线之上 (+10): 短期动量向上</li><li>RSI 64, 在 40-70 健康区间 (+10)</li><li>今日成交量不大 (+0)</li><li>收盘离 MA50 不超过 2 倍 ATR (+5): 不算追得太远</li></ul>
-      <p><i>如果错了怎么办: 如果收盘跌破止损 246.32, 按计划离场, 不要死扛; 如果突破 20 日高点 275.34, 趋势可能转强, 再重新评估.</i></p>
-      <p>新闻 (只供鉴别, 不改变评分):</p><ul><li>2026-11-13 PwC spots a major shift in retirement money</li><li>2026-11-12 Cerebras Adds Microsoft Partnership to Diversify Beyond OpenAI</li><li>2026-11-12 e.l.f. Beauty vs. lululemon athletica: Which Consumer Goods Stock Is a Better Buy for 2027?</li></ul>
-    </details>
-
-    <details class="card watch" data-score="85" data-action="关注 / 可分批">
-      <summary>
-        <span class="ticker">AMD AMD</span>
-        <span class="score badge-green">85分 较昨日 +0</span>
-        <span class="action">关注 / 可分批</span>
-        <span class="meta">收盘 585.3 USD &nbsp;|&nbsp; 止损 <b>473.77</b> &nbsp;|&nbsp; 目标 <b>752.59</b> &nbsp;|&nbsp; 仓位上限 20%</span>
-      </summary>
-      <div class="grid"><span>MA20 518.76</span><span>MA50 552.99</span><span>MA200 421.71</span><span>RSI 57.4</span><span>ATR 44.61</span><span>阻力 594.0</span><span>支撑 402.1</span><span>数据源 tiger</span></div>
-      <p>趋势强, 但仍建议分批, 不要一次全仓</p>
-      <ul><li>收盘在 MA200 之上 (+25): 长期趋势向上</li><li>收盘在 MA50 之上 (+15): 中期趋势向上</li><li>收盘在 MA20 之上 (+10): 短期趋势向上</li><li>均线不是多头排列 (+0)</li><li>MACD 在信号线之上 (+10): 短期动量向上</li><li>RSI 57, 在 40-70 健康区间 (+10)</li><li>今日成交量大于 20 日均量 (+10): 有资金关注</li><li>收盘离 MA50 不超过 2 倍 ATR (+5): 不算追得太远</li></ul>
-      <p><i>如果错了怎么办: 如果收盘跌破止损 473.77, 按计划离场, 不要死扛; 如果突破 20 日高点 594.0, 趋势可能转强, 再重新评估.</i></p>
-      <p>下次财报: 2027-02-03 (82 天后)</p><p>新闻 (只供鉴别, 不改变评分):</p><ul><li>2026-11-12 AMD, Broadcom stocks jump as Nvidia CEO Jensen Huang resigns</li><li>2026-11-12 AMD CEO Lisa Su on data center backlash: Tech has to sell the vision</li><li>2026-11-12 AMD CEO Dr. Lisa Su reflects on her biggest lessons of 2026</li></ul>
-    </details>
-
-    <details class="card hold" data-score="70" data-action="持有 / 观望偏多">
-      <summary>
-        <span class="ticker">MSFT 微软</span>
-        <span class="score badge-amber">70分 较昨日 -10</span>
-        <span class="action">持有 / 观望偏多</span>
-        <span class="meta">收盘 523.0 USD &nbsp;|&nbsp; 止损 <b>488.04</b> &nbsp;|&nbsp; 目标 <b>575.44</b> &nbsp;|&nbsp; 仓位上限 10%</span>
-      </summary>
-      <div class="grid"><span>MA20 529.64</span><span>MA50 518.72</span><span>MA200 440.97</span><span>RSI 49.5</span><span>ATR 17.48</span><span>阻力 559.15</span><span>支撑 504.96</span><span>数据源 tiger</span></div>
-      <p>趋势偏多, 有持仓可持有, 没持仓等回调或突破再看</p>
-      <ul><li>收盘在 MA200 之上 (+25): 长期趋势向上</li><li>收盘在 MA50 之上 (+15): 中期趋势向上</li><li>收盘在 MA20 之下 (+0): 短期走弱</li><li>均线多头排列 MA20&gt;MA50&gt;MA200 (+15)</li><li>MACD 在信号线之下 (+0): 短期动量向下</li><li>RSI 49, 在 40-70 健康区间 (+10)</li><li>今日成交量不大 (+0)</li><li>收盘离 MA50 不超过 2 倍 ATR (+5): 不算追得太远</li></ul>
-      <p><i>如果错了怎么办: 如果收盘跌破止损 488.04, 按计划离场, 不要死扛; 如果突破 20 日高点 559.15, 趋势可能转强, 再重新评估.</i></p>
-      <p>下次财报: 2027-01-28 (76 天后)</p><p>新闻 (只供鉴别, 不改变评分):</p><ul><li>2026-11-12 Bill Ackman says Microsoft&#x27;s position is &#x27;really, really strong&#x27; as Anthropic pushes into enterprise software</li><li>2026-11-12 Why Bill Ackman sees value in Microsoft</li><li>2026-11-12 Microsoft outage disrupts Outlook, Teams, and Copilot for users &#x27;in any region&#x27;</li></ul>
-    </details>
-
-    <details class="card hold" data-score="60" data-action="持有 / 观望偏多">
-      <summary>
-        <span class="ticker">AVGO 博通</span>
-        <span class="score badge-amber">60分 较昨日 +15</span>
-        <span class="action">持有 / 观望偏多</span>
-        <span class="meta">收盘 364.36 USD &nbsp;|&nbsp; 止损 <b>316.64</b> &nbsp;|&nbsp; 目标 <b>435.94</b> &nbsp;|&nbsp; 仓位上限 10%</span>
-      </summary>
-      <div class="grid"><span>MA20 330.05</span><span>MA50 345.59</span><span>MA200 367.34</span><span>RSI 61.7</span><span>ATR 19.09</span><span>阻力 369.82</span><span>支撑 289.77</span><span>数据源 tiger</span></div>
-      <p>趋势偏多, 有持仓可持有, 没持仓等回调或突破再看</p>
-      <ul><li>收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项</li><li>收盘在 MA50 之上 (+15): 中期趋势向上</li><li>收盘在 MA20 之上 (+10): 短期趋势向上</li><li>均线不是多头排列 (+0)</li><li>MACD 在信号线之上 (+10): 短期动量向上</li><li>RSI 62, 在 40-70 健康区间 (+10)</li><li>今日成交量大于 20 日均量 (+10): 有资金关注</li><li>收盘离 MA50 不超过 2 倍 ATR (+5): 不算追得太远</li></ul>
-      <p><i>如果错了怎么办: 如果收盘跌破止损 316.64, 按计划离场, 不要死扛; 如果突破 20 日高点 369.82, 趋势可能转强, 再重新评估.</i></p>
-      <p>下次财报: 2026-12-10 (27 天后)</p><p>新闻 (只供鉴别, 不改变评分):</p><ul><li>2026-11-12 AMD, Broadcom stocks jump as Nvidia CEO Jensen Huang resigns</li><li>2026-11-12 5 Best Growth Stocks for the Next 5 Years</li><li>2026-11-12 Can Huang&#x27;s Exit Create Chip Competition</li></ul>
-    </details>
-
-    <details class="card wait" data-score="50" data-action="观望">
-      <summary>
-        <span class="ticker">TSM 台积电</span>
-        <span class="score badge-grey">50分 较昨日 +0</span>
-        <span class="action">观望</span>
-        <span class="meta">收盘 405.49 USD &nbsp;|&nbsp; 止损 <b>358.84</b> &nbsp;|&nbsp; 目标 <b>475.47</b> &nbsp;|&nbsp; 仓位上限 0%</span>
-      </summary>
-      <div class="grid"><span>MA20 409.55</span><span>MA50 430.48</span><span>MA200 402.76</span><span>RSI 46.5</span><span>ATR 18.66</span><span>阻力 440.88</span><span>支撑 351.19</span><span>数据源 tiger</span></div>
-      <p>方向不明, 今天无操作, 等趋势走出来</p>
-      <ul><li>收盘在 MA200 之上 (+25): 长期趋势向上</li><li>收盘在 MA50 之下 (+0): 中期趋势向下</li><li>收盘在 MA20 之下 (+0): 短期走弱</li><li>均线不是多头排列 (+0)</li><li>MACD 在信号线之上 (+10): 短期动量向上</li><li>RSI 47, 在 40-70 健康区间 (+10)</li><li>今日成交量不大 (+0)</li><li>收盘离 MA50 不超过 2 倍 ATR (+5): 不算追得太远</li></ul>
-      <p><i>如果错了怎么办: 如果收盘跌破止损 358.84, 按计划离场, 不要死扛; 如果突破 20 日高点 440.88, 趋势可能转强, 再重新评估.</i></p>
-      <p>下次财报: 2027-01-14 (62 天后)</p><p>新闻 (只供鉴别, 不改变评分):</p><ul><li>2026-11-12 Bernstein’s Mark Li Raised His Taiwan Semiconductor Manufacturing (TSM) Target to $600. Here’s What Changed</li><li>2026-11-12 Here’s Why Bernstein’s Mark Li Is Raising His Price Target on TSMC (TSM) to $600</li><li>2026-11-12 Prediction: $500 a Month Invested in Taiwan Semiconductor Manufacturing Will Be Worth This Much by 2030</li></ul>
-    </details>
-
-    <details class="card wait" data-score="35" data-action="偏弱 / 回避">
-      <summary>
-        <span class="ticker">ORCL 甲骨文</span>
-        <span class="score badge-grey">35分 较昨日 +10</span>
-        <span class="action">偏弱 / 回避</span>
-        <span class="meta">收盘 127.11 USD &nbsp;|&nbsp; 止损 <b>108.49</b> &nbsp;|&nbsp; 目标 <b>155.04</b> &nbsp;|&nbsp; 仓位上限 0%</span>
-      </summary>
-      <div class="grid"><span>MA20 126.74</span><span>MA50 137.24</span><span>MA200 154.33</span><span>RSI 50.6</span><span>ATR 9.31</span><span>阻力 148.48</span><span>支撑 109.21</span><span>数据源 tiger</span></div>
-      <p>趋势偏弱, 不要新开仓</p>
-      <ul><li>收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项</li><li>收盘在 MA50 之下 (+0): 中期趋势向下</li><li>收盘在 MA20 之上 (+10): 短期趋势向上</li><li>均线不是多头排列 (+0)</li><li>MACD 在信号线之上 (+10): 短期动量向上</li><li>RSI 51, 在 40-70 健康区间 (+10)</li><li>今日成交量不大 (+0)</li><li>收盘离 MA50 不超过 2 倍 ATR (+5): 不算追得太远</li></ul>
-      <p><i>如果错了怎么办: 如果收盘跌破止损 108.49, 按计划离场, 不要死扛; 如果突破 20 日高点 148.48, 趋势可能转强, 再重新评估.</i></p>
-      <p>下次财报: 2026-12-15 (32 天后)</p><p>新闻 (只供鉴别, 不改变评分):</p><ul><li>2026-11-12 5 Best AI Stocks to Buy After Wells Fargo’s Outlook Upgrade</li><li>2026-11-12 Cerebras Adds Microsoft Partnership to Diversify Beyond OpenAI</li><li>2026-11-12 AI Chipmaker Cerebras Tops Q3 Views, Adds Big Customers</li></ul>
-    </details>
-
-    <details class="card wait" data-score="35" data-action="偏弱 / 回避">
-      <summary>
-        <span class="ticker">MU 美光科技</span>
-        <span class="score badge-grey">35分 较昨日 -10</span>
-        <span class="action">偏弱 / 回避</span>
-        <span class="meta">收盘 798.44 USD &nbsp;|&nbsp; 止损 <b>638.07</b> &nbsp;|&nbsp; 目标 <b>1039.0</b> &nbsp;|&nbsp; 仓位上限 0%</span>
-      </summary>
-      <div class="grid"><span>MA20 843.03</span><span>MA50 947.37</span><span>MA200 763.89</span><span>RSI 44.0</span><span>ATR 64.15</span><span>阻力 990.0</span><span>支撑 650.0</span><span>数据源 tiger</span></div>
-      <p>趋势偏弱, 不要新开仓</p>
-      <ul><li>收盘在 MA200 之上 (+25): 长期趋势向上</li><li>收盘在 MA50 之下 (+0): 中期趋势向下</li><li>收盘在 MA20 之下 (+0): 短期走弱</li><li>均线不是多头排列 (+0)</li><li>MACD 在信号线之下 (+0): 短期动量向下</li><li>RSI 44, 在 40-70 健康区间 (+10)</li><li>今日成交量不大 (+0)</li><li>收盘离 MA50 太远 (+0): 追高回调风险大</li></ul>
-      <p><i>如果错了怎么办: 如果收盘跌破止损 638.07, 按计划离场, 不要死扛; 如果突破 20 日高点 990.0, 趋势可能转强, 再重新评估.</i></p>
-      <p>下次财报: 2026-12-24 (41 天后)</p><p>新闻 (只供鉴别, 不改变评分):</p><ul><li>2026-11-12 5 Best Growth Stocks for the Next 5 Years</li><li>2026-11-12 5 Unrivaled Stocks to Buy for the Next Decade</li><li>2026-11-12 Micron, Other Memory Chip Stocks Fall on Nvidia Shakeup. Why They’re at Risk.</li></ul>
-    </details>
-
-    <details class="card wait" data-score="30" data-action="偏弱 / 回避">
-      <summary>
-        <span class="ticker">000660.KS 海力士</span>
-        <span class="score badge-grey">30分 较昨日 +20</span>
-        <span class="action">偏弱 / 回避</span>
-        <span class="meta">收盘 1313000.0 KRW &nbsp;|&nbsp; 止损 <b>1024250.0</b> &nbsp;|&nbsp; 目标 <b>1746125.0</b> &nbsp;|&nbsp; 仓位上限 0%</span>
-      </summary>
-      <div class="grid"><span>MA20 1309750.0</span><span>MA50 1546400.0</span><span>MA200 1519895.0</span><span>RSI 51.9</span><span>ATR 115500.0</span><span>阻力 1587000.0</span><span>支撑 1089000.0</span><span>数据源 yfinance</span></div>
-      <p>趋势偏弱, 不要新开仓</p>
-      <ul><li>收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项</li><li>收盘在 MA50 之下 (+0): 中期趋势向下</li><li>收盘在 MA20 之上 (+10): 短期趋势向上</li><li>均线不是多头排列 (+0)</li><li>MACD 在信号线之上 (+10): 短期动量向上</li><li>RSI 52, 在 40-70 健康区间 (+10)</li><li>今日成交量不大 (+0)</li><li>收盘离 MA50 太远 (+0): 追高回调风险大</li></ul>
-      <p><i>如果错了怎么办: 如果收盘跌破止损 1024250.0, 按计划离场, 不要死扛; 如果突破 20 日高点 1587000.0, 趋势可能转强, 再重新评估.</i></p>
-      <p>新闻: 暂无</p>
-    </details>
-
-    <details class="card avoid" data-score="20" data-action="回避 / 卖出信号">
-      <summary>
-        <span class="ticker">META Meta</span>
-        <span class="score badge-red">20分 较昨日 +0</span>
-        <span class="action">回避 / 卖出信号</span>
-        <span class="meta">收盘 623.61 USD &nbsp;|&nbsp; 止损 <b>581.75</b> &nbsp;|&nbsp; 目标 <b>686.4</b> &nbsp;|&nbsp; 仓位上限 0%</span>
-      </summary>
-      <div class="grid"><span>MA20 640.44</span><span>MA50 679.19</span><span>MA200 631.25</span><span>RSI 44.1</span><span>ATR 20.93</span><span>阻力 738.49</span><span>支撑 583.8</span><span>数据源 tiger</span></div>
-      <p>趋势向下, 有持仓要按止损处理, 没持仓不要碰</p>
-      <ul><li>收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项</li><li>收盘在 MA50 之下 (+0): 中期趋势向下</li><li>收盘在 MA20 之下 (+0): 短期走弱</li><li>均线不是多头排列 (+0)</li><li>MACD 在信号线之上 (+10): 短期动量向上</li><li>RSI 44, 在 40-70 健康区间 (+10)</li><li>今日成交量不大 (+0)</li><li>收盘离 MA50 太远 (+0): 追高回调风险大</li></ul>
-      <p><i>如果错了怎么办: 如果收盘跌破止损 581.75, 按计划离场, 不要死扛; 如果突破 20 日高点 738.49, 趋势可能转强, 再重新评估.</i></p>
-      <p>下次财报: 2027-01-28 (76 天后)</p><p>新闻 (只供鉴别, 不改变评分):</p><ul><li>2026-11-12 Anthropic’s $500 Billion Question</li><li>2026-11-12 Musk: SpaceX Makes Compute “Actually Usable” in 2 Months, 3x Faster than Rivals</li><li>2026-11-12 What ERock (EROC) Said on Its Q3 Earnings Call</li></ul>
-    </details>
-
-    <details class="card avoid" data-score="20" data-action="回避 / 卖出信号">
-      <summary>
-        <span class="ticker">BABA 阿里巴巴</span>
-        <span class="score badge-red">20分 较昨日 -5</span>
-        <span class="action">回避 / 卖出信号</span>
-        <span class="meta">收盘 94.36 USD &nbsp;|&nbsp; 止损 <b>85.37</b> &nbsp;|&nbsp; 目标 <b>107.84</b> &nbsp;|&nbsp; 仓位上限 0%</span>
-      </summary>
-      <div class="grid"><span>MA20 102.99</span><span>MA50 107.22</span><span>MA200 123.19</span><span>RSI 42.0</span><span>ATR 3.6</span><span>阻力 112.17</span><span>支撑 93.42</span><span>数据源 tiger</span></div>
-      <p>趋势向下, 有持仓要按止损处理, 没持仓不要碰</p>
-      <ul><li>收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项</li><li>收盘在 MA50 之下 (+0): 中期趋势向下</li><li>收盘在 MA20 之下 (+0): 短期走弱</li><li>均线不是多头排列 (+0)</li><li>MACD 在信号线之下 (+0): 短期动量向下</li><li>RSI 42, 在 40-70 健康区间 (+10)</li><li>今日成交量大于 20 日均量 (+10): 有资金关注</li><li>收盘离 MA50 太远 (+0): 追高回调风险大</li></ul>
-      <p><i>如果错了怎么办: 如果收盘跌破止损 85.37, 按计划离场, 不要死扛; 如果突破 20 日高点 112.17, 趋势可能转强, 再重新评估.</i></p>
-      <p>下次财报: 2026-11-19 (6 天后) ⚠️ 财报在 7 天内, 波动大</p><p>新闻 (只供鉴别, 不改变评分):</p><ul><li>2026-11-12 5 Best AI Stocks to Buy After Wells Fargo’s Outlook Upgrade</li><li>2026-11-12 Why Jensen Huang’s Exit Is Bad News for Alibaba and China</li><li>2026-11-12 Wall Street ends lower as Nvidia CEO resigns; US yields up</li></ul>
-    </details>
-
-    <details class="card avoid" data-score="10" data-action="回避 / 卖出信号">
-      <summary>
-        <span class="ticker">GOOGL 谷歌</span>
-        <span class="score badge-red">10分 较昨日 +10</span>
-        <span class="action">回避 / 卖出信号</span>
-        <span class="meta">收盘 298.7 USD &nbsp;|&nbsp; 止损 <b>275.83</b> &nbsp;|&nbsp; 目标 <b>333.0</b> &nbsp;|&nbsp; 仓位上限 0%</span>
-      </summary>
-      <div class="grid"><span>MA20 305.66</span><span>MA50 329.12</span><span>MA200 338.69</span><span>RSI 38.2</span><span>ATR 11.43</span><span>阻力 350.66</span><span>支撑 276.92</span><span>数据源 tiger</span></div>
-      <p>趋势向下, 有持仓要按止损处理, 没持仓不要碰</p>
-      <ul><li>收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项</li><li>收盘在 MA50 之下 (+0): 中期趋势向下</li><li>收盘在 MA20 之下 (+0): 短期走弱</li><li>均线不是多头排列 (+0)</li><li>MACD 在信号线之上 (+10): 短期动量向上</li><li>RSI 38, 不在健康区间 (+0)</li><li>今日成交量不大 (+0)</li><li>收盘离 MA50 太远 (+0): 追高回调风险大</li></ul>
-      <p><i>如果错了怎么办: 如果收盘跌破止损 275.83, 按计划离场, 不要死扛; 如果突破 20 日高点 350.66, 趋势可能转强, 再重新评估.</i></p>
-      <p>新闻 (只供鉴别, 不改变评分):</p><ul><li>2026-11-13 TeraWulf Stock Fell 24% in a Month. Lucid Capital Still Sees 67% Upside</li><li>2026-11-13 Your Customers Are Asking AI About Your Company. Here’s How to Audit What It Says.</li><li>2026-11-12 Alphabet Draws $5 Billion in Orders as AI Frenzy Builds</li></ul>
-    </details>
-
-    <details class="card avoid" data-score="10" data-action="回避 / 卖出信号">
-      <summary>
-        <span class="ticker">NVDA 英伟达</span>
-        <span class="score badge-red">10分 较昨日 +0</span>
-        <span class="action">回避 / 卖出信号</span>
-        <span class="meta">收盘 166.19 USD &nbsp;|&nbsp; 止损 <b>139.54</b> &nbsp;|&nbsp; 目标 <b>206.17</b> &nbsp;|&nbsp; 仓位上限 0%</span>
-      </summary>
-      <div class="grid"><span>MA20 201.25</span><span>MA50 215.96</span><span>MA200 204.34</span><span>RSI 24.5</span><span>ATR 10.66</span><span>阻力 222.19</span><span>支撑 148.8</span><span>数据源 tiger</span></div>
-      <p>趋势向下, 有持仓要按止损处理, 没持仓不要碰</p>
-      <ul><li>收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项</li><li>收盘在 MA50 之下 (+0): 中期趋势向下</li><li>收盘在 MA20 之下 (+0): 短期走弱</li><li>均线不是多头排列 (+0)</li><li>MACD 在信号线之下 (+0): 短期动量向下</li><li>RSI 24, 低于 30 超卖, 不加分, 跌势中不要抄底</li><li>今日成交量大于 20 日均量 (+10): 有资金关注</li><li>收盘离 MA50 太远 (+0): 追高回调风险大</li></ul>
-      <p><i>如果错了怎么办: 如果收盘跌破止损 139.54, 按计划离场, 不要死扛; 如果突破 20 日高点 222.19, 趋势可能转强, 再重新评估.</i></p>
-      <p>下次财报: 2026-11-17 (4 天后) ⚠️ 财报在 7 天内, 波动大</p><p>新闻 (只供鉴别, 不改变评分):</p><ul><li>2026-11-12 Nvidia market cap plunges $490 billion following former CEO Huang&#x27;s affair scandals</li><li>2026-11-12 How Nvidia&#x27;s stock decline might impact your 401(k) and portfolio</li><li>2026-11-12 Alleged spy at center of Nvidia CEO affair reportedly being probed over Super Micro smuggling effort</li></ul>
-    </details>
-
-    <details class="card avoid" data-score="0" data-action="回避 / 卖出信号">
-      <summary>
-        <span class="ticker">INTC 英特尔</span>
-        <span class="score badge-red">0分 较昨日 +0</span>
-        <span class="action">回避 / 卖出信号</span>
-        <span class="meta">收盘 61.2 USD &nbsp;|&nbsp; 止损 <b>45.42</b> &nbsp;|&nbsp; 目标 <b>84.87</b> &nbsp;|&nbsp; 仓位上限 0%</span>
-      </summary>
-      <div class="grid"><span>MA20 75.25</span><span>MA50 95.61</span><span>MA200 87.34</span><span>RSI 30.8</span><span>ATR 6.31</span><span>阻力 95.68</span><span>支撑 51.51</span><span>数据源 tiger</span></div>
-      <p>趋势向下, 有持仓要按止损处理, 没持仓不要碰</p>
-      <ul><li>收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项</li><li>收盘在 MA50 之下 (+0): 中期趋势向下</li><li>收盘在 MA20 之下 (+0): 短期走弱</li><li>均线不是多头排列 (+0)</li><li>MACD 在信号线之下 (+0): 短期动量向下</li><li>RSI 31, 不在健康区间 (+0)</li><li>今日成交量不大 (+0)</li><li>收盘离 MA50 太远 (+0): 追高回调风险大</li></ul>
-      <p><i>如果错了怎么办: 如果收盘跌破止损 45.42, 按计划离场, 不要死扛; 如果突破 20 日高点 95.68, 趋势可能转强, 再重新评估.</i></p>
-      <p>下次财报: 2027-01-29 (77 天后)</p><p>新闻 (只供鉴别, 不改变评分):</p><ul><li>2026-11-12 Intel CEO Lip-Bu Tan on turnaround efforts amid stock slump: &#x27;I feel called to do this&#x27;</li><li>2026-11-12 Intel CEO Lip-Bu Tan sees a &#x27;healthy pullback&#x27; ahead in the AI boom</li><li>2026-11-12 Why Are Advanced Micro Devices (AMD) Shares Drawing Fresh AI Attention?</li></ul>
-    </details>
-</div>
-<h2>术语解释</h2>
-<ul>
-<li>MA20/50/200: 过去 20/50/200 天收盘价的平均线, 线向上 = 趋势向上。</li>
-<li>ATR: 平均真实波幅, 衡量一只股票每天大概波动多少钱, 波动越大止损越宽。</li>
-<li>RSI: 相对强弱, 0-100, 40-70 是健康区间, 70 以上偏热, 30 以下偏冷。</li>
-<li>1.5R: 目标盈利是止损亏损的 1.5 倍。</li>
-<li>止损是活的: 每天根据 ATR 重新算, 不是一个固定价。</li>
-</ul>
-<p>这是策略建议, 不是投资承诺; 趋势会变, 消息要鉴别, 止损是活的, 每天会变。不下单。</p>
-<p>数据文件: data.json (和这个页面一起在仓库里, 每天更新它再跑 build_site.py 就行)。</p>
 <script>
-function filterCards(f, btn){
-  document.querySelectorAll('button[data-filter]').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('#list .card').forEach(c=>{
-    c.style.display = (f==='all' || c.classList.contains(f)) ? '' : 'none';
-  });
+const STOCKS=[{"ticker": "AAPL", "name": "苹果", "score": 90, "action": "关注/可分批", "cat": "focus", "price": 354.88, "cur": "$", "stop": 335.86, "target": 383.41, "pos": "20%", "chg": 0, "ma20": 345.51, "ma50": 338.48, "ma200": 300.76, "rsi": 54.7, "atr": 9.51, "res": 359.37, "sup": 325.33, "earn": "2027-01-29", "earnWarn": false, "reasons": ["收盘在 MA200 之上 (+25): 长期趋势向上", "收盘在 MA50 之上 (+15): 中期趋势向上", "收盘在 MA20 之上 (+10): 短期趋势向上", "均线多头排列 MA20>MA50>MA200 (+15)", "MACD 在信号线之上 (+10): 短期动量向上", "RSI 55, 在 40-70 健康区间 (+10)", "今日成交量不大 (+0)", "收盘离 MA50 不超过 2 倍 ATR (+5): 不算追得太远"], "wrong": "如果收盘跌破止损 335.86, 按计划离场, 不要死扛; 如果突破 20 日高点 359.37, 趋势可能转强, 再重新评估."}, {"ticker": "AMZN", "name": "亚马逊", "score": 90, "action": "关注/可分批", "cat": "focus", "price": 267.44, "cur": "$", "stop": 246.32, "target": 299.12, "pos": "20%", "chg": 0, "ma20": 256.5, "ma50": 254.66, "ma200": 244.47, "rsi": 63.7, "atr": 10.56, "res": 275.34, "sup": 229.36, "earn": "", "earnWarn": false, "reasons": ["收盘在 MA200 之上 (+25): 长期趋势向上", "收盘在 MA50 之上 (+15): 中期趋势向上", "收盘在 MA20 之上 (+10): 短期趋势向上", "均线多头排列 MA20>MA50>MA200 (+15)", "MACD 在信号线之上 (+10): 短期动量向上", "RSI 64, 在 40-70 健康区间 (+10)", "今日成交量不大 (+0)", "收盘离 MA50 不超过 2 倍 ATR (+5): 不算追得太远"], "wrong": "如果收盘跌破止损 246.32, 按计划离场, 不要死扛; 如果突破 20 日高点 275.34, 趋势可能转强, 再重新评估."}, {"ticker": "AMD", "name": "AMD", "score": 85, "action": "关注/可分批", "cat": "focus", "price": 585.3, "cur": "$", "stop": 473.77, "target": 752.59, "pos": "20%", "chg": 0, "ma20": 518.76, "ma50": 552.99, "ma200": 421.71, "rsi": 57.4, "atr": 44.61, "res": 594.0, "sup": 402.1, "earn": "2027-02-03", "earnWarn": false, "reasons": ["收盘在 MA200 之上 (+25): 长期趋势向上", "收盘在 MA50 之上 (+15): 中期趋势向上", "收盘在 MA20 之上 (+10): 短期趋势向上", "均线不是多头排列 (+0)", "MACD 在信号线之上 (+10): 短期动量向上", "RSI 57, 在 40-70 健康区间 (+10)", "今日成交量大于 20 日均量 (+10): 有资金关注", "收盘离 MA50 不超过 2 倍 ATR (+5): 不算追得太远"], "wrong": "如果收盘跌破止损 473.77, 按计划离场, 不要死扛; 如果突破 20 日高点 594.0, 趋势可能转强, 再重新评估."}, {"ticker": "MSFT", "name": "微软", "score": 70, "action": "持有/观望偏多", "cat": "watch", "price": 523.0, "cur": "$", "stop": 488.04, "target": 575.44, "pos": "10%", "chg": -10, "ma20": 529.64, "ma50": 518.72, "ma200": 440.97, "rsi": 49.5, "atr": 17.48, "res": 559.15, "sup": 504.96, "earn": "2027-01-28", "earnWarn": false, "reasons": ["收盘在 MA200 之上 (+25): 长期趋势向上", "收盘在 MA50 之上 (+15): 中期趋势向上", "收盘在 MA20 之下 (+0): 短期走弱", "均线多头排列 MA20>MA50>MA200 (+15)", "MACD 在信号线之下 (+0): 短期动量向下", "RSI 49, 在 40-70 健康区间 (+10)", "今日成交量不大 (+0)", "收盘离 MA50 不超过 2 倍 ATR (+5): 不算追得太远"], "wrong": "如果收盘跌破止损 488.04, 按计划离场, 不要死扛; 如果突破 20 日高点 559.15, 趋势可能转强, 再重新评估."}, {"ticker": "AVGO", "name": "博通", "score": 60, "action": "持有/观望偏多", "cat": "watch", "price": 364.36, "cur": "$", "stop": 316.64, "target": 435.94, "pos": "10%", "chg": 15, "ma20": 330.05, "ma50": 345.59, "ma200": 367.34, "rsi": 61.7, "atr": 19.09, "res": 369.82, "sup": 289.77, "earn": "2026-12-10", "earnWarn": false, "reasons": ["收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项", "收盘在 MA50 之上 (+15): 中期趋势向上", "收盘在 MA20 之上 (+10): 短期趋势向上", "均线不是多头排列 (+0)", "MACD 在信号线之上 (+10): 短期动量向上", "RSI 62, 在 40-70 健康区间 (+10)", "今日成交量大于 20 日均量 (+10): 有资金关注", "收盘离 MA50 不超过 2 倍 ATR (+5): 不算追得太远"], "wrong": "如果收盘跌破止损 316.64, 按计划离场, 不要死扛; 如果突破 20 日高点 369.82, 趋势可能转强, 再重新评估."}, {"ticker": "TSM", "name": "台积电", "score": 50, "action": "观望", "cat": "watch", "price": 405.49, "cur": "$", "stop": 358.84, "target": 475.47, "pos": "0%", "chg": 0, "ma20": 409.55, "ma50": 430.48, "ma200": 402.76, "rsi": 46.5, "atr": 18.66, "res": 440.88, "sup": 351.19, "earn": "2027-01-14", "earnWarn": false, "reasons": ["收盘在 MA200 之上 (+25): 长期趋势向上", "收盘在 MA50 之下 (+0): 中期趋势向下", "收盘在 MA20 之下 (+0): 短期走弱", "均线不是多头排列 (+0)", "MACD 在信号线之上 (+10): 短期动量向上", "RSI 47, 在 40-70 健康区间 (+10)", "今日成交量不大 (+0)", "收盘离 MA50 不超过 2 倍 ATR (+5): 不算追得太远"], "wrong": "如果收盘跌破止损 358.84, 按计划离场, 不要死扛; 如果突破 20 日高点 440.88, 趋势可能转强, 再重新评估."}, {"ticker": "ORCL", "name": "甲骨文", "score": 35, "action": "偏弱/回避", "cat": "avoid", "price": 127.11, "cur": "$", "stop": 108.49, "target": 155.04, "pos": "0%", "chg": 10, "ma20": 126.74, "ma50": 137.24, "ma200": 154.33, "rsi": 50.6, "atr": 9.31, "res": 148.48, "sup": 109.21, "earn": "2026-12-15", "earnWarn": false, "reasons": ["收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项", "收盘在 MA50 之下 (+0): 中期趋势向下", "收盘在 MA20 之上 (+10): 短期趋势向上", "均线不是多头排列 (+0)", "MACD 在信号线之上 (+10): 短期动量向上", "RSI 51, 在 40-70 健康区间 (+10)", "今日成交量不大 (+0)", "收盘离 MA50 不超过 2 倍 ATR (+5): 不算追得太远"], "wrong": "如果收盘跌破止损 108.49, 按计划离场, 不要死扛; 如果突破 20 日高点 148.48, 趋势可能转强, 再重新评估."}, {"ticker": "MU", "name": "美光科技", "score": 35, "action": "偏弱/回避", "cat": "avoid", "price": 798.44, "cur": "$", "stop": 638.07, "target": 1039.0, "pos": "0%", "chg": -10, "ma20": 843.03, "ma50": 947.37, "ma200": 763.89, "rsi": 44.0, "atr": 64.15, "res": 990.0, "sup": 650.0, "earn": "2026-12-24", "earnWarn": false, "reasons": ["收盘在 MA200 之上 (+25): 长期趋势向上", "收盘在 MA50 之下 (+0): 中期趋势向下", "收盘在 MA20 之下 (+0): 短期走弱", "均线不是多头排列 (+0)", "MACD 在信号线之下 (+0): 短期动量向下", "RSI 44, 在 40-70 健康区间 (+10)", "今日成交量不大 (+0)", "收盘离 MA50 太远 (+0): 追高回调风险大"], "wrong": "如果收盘跌破止损 638.07, 按计划离场, 不要死扛; 如果突破 20 日高点 990.0, 趋势可能转强, 再重新评估."}, {"ticker": "000660.KS", "name": "海力士", "score": 30, "action": "偏弱/回避", "cat": "avoid", "price": 1313000.0, "cur": "₩", "stop": 1024250.0, "target": 1746125.0, "pos": "0%", "chg": 20, "ma20": 1309750.0, "ma50": 1546400.0, "ma200": 1519895.0, "rsi": 51.9, "atr": 115500.0, "res": 1587000.0, "sup": 1089000.0, "earn": "", "earnWarn": false, "reasons": ["收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项", "收盘在 MA50 之下 (+0): 中期趋势向下", "收盘在 MA20 之上 (+10): 短期趋势向上", "均线不是多头排列 (+0)", "MACD 在信号线之上 (+10): 短期动量向上", "RSI 52, 在 40-70 健康区间 (+10)", "今日成交量不大 (+0)", "收盘离 MA50 太远 (+0): 追高回调风险大"], "wrong": "如果收盘跌破止损 1024250.0, 按计划离场, 不要死扛; 如果突破 20 日高点 1587000.0, 趋势可能转强, 再重新评估."}, {"ticker": "META", "name": "Meta", "score": 20, "action": "回避/卖出信号", "cat": "avoid", "price": 623.61, "cur": "$", "stop": 581.75, "target": 686.4, "pos": "0%", "chg": 0, "ma20": 640.44, "ma50": 679.19, "ma200": 631.25, "rsi": 44.1, "atr": 20.93, "res": 738.49, "sup": 583.8, "earn": "2027-01-28", "earnWarn": false, "reasons": ["收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项", "收盘在 MA50 之下 (+0): 中期趋势向下", "收盘在 MA20 之下 (+0): 短期走弱", "均线不是多头排列 (+0)", "MACD 在信号线之上 (+10): 短期动量向上", "RSI 44, 在 40-70 健康区间 (+10)", "今日成交量不大 (+0)", "收盘离 MA50 太远 (+0): 追高回调风险大"], "wrong": "如果收盘跌破止损 581.75, 按计划离场, 不要死扛; 如果突破 20 日高点 738.49, 趋势可能转强, 再重新评估."}, {"ticker": "BABA", "name": "阿里巴巴", "score": 20, "action": "回避/卖出信号", "cat": "avoid", "price": 94.36, "cur": "$", "stop": 85.37, "target": 107.84, "pos": "0%", "chg": -5, "ma20": 102.99, "ma50": 107.22, "ma200": 123.19, "rsi": 42.0, "atr": 3.6, "res": 112.17, "sup": 93.42, "earn": "2026-11-19", "earnWarn": true, "reasons": ["收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项", "收盘在 MA50 之下 (+0): 中期趋势向下", "收盘在 MA20 之下 (+0): 短期走弱", "均线不是多头排列 (+0)", "MACD 在信号线之下 (+0): 短期动量向下", "RSI 42, 在 40-70 健康区间 (+10)", "今日成交量大于 20 日均量 (+10): 有资金关注", "收盘离 MA50 太远 (+0): 追高回调风险大"], "wrong": "如果收盘跌破止损 85.37, 按计划离场, 不要死扛; 如果突破 20 日高点 112.17, 趋势可能转强, 再重新评估."}, {"ticker": "GOOGL", "name": "谷歌", "score": 10, "action": "回避/卖出信号", "cat": "avoid", "price": 298.7, "cur": "$", "stop": 275.83, "target": 333.0, "pos": "0%", "chg": 10, "ma20": 305.66, "ma50": 329.12, "ma200": 338.69, "rsi": 38.2, "atr": 11.43, "res": 350.66, "sup": 276.92, "earn": "", "earnWarn": false, "reasons": ["收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项", "收盘在 MA50 之下 (+0): 中期趋势向下", "收盘在 MA20 之下 (+0): 短期走弱", "均线不是多头排列 (+0)", "MACD 在信号线之上 (+10): 短期动量向上", "RSI 38, 不在健康区间 (+0)", "今日成交量不大 (+0)", "收盘离 MA50 太远 (+0): 追高回调风险大"], "wrong": "如果收盘跌破止损 275.83, 按计划离场, 不要死扛; 如果突破 20 日高点 350.66, 趋势可能转强, 再重新评估."}, {"ticker": "NVDA", "name": "英伟达", "score": 10, "action": "回避/卖出信号", "cat": "avoid", "price": 166.19, "cur": "$", "stop": 139.54, "target": 206.17, "pos": "0%", "chg": 0, "ma20": 201.25, "ma50": 215.96, "ma200": 204.34, "rsi": 24.5, "atr": 10.66, "res": 222.19, "sup": 148.8, "earn": "2026-11-17", "earnWarn": true, "reasons": ["收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项", "收盘在 MA50 之下 (+0): 中期趋势向下", "收盘在 MA20 之下 (+0): 短期走弱", "均线不是多头排列 (+0)", "MACD 在信号线之下 (+0): 短期动量向下", "RSI 24, 低于 30 超卖, 不加分, 跌势中不要抄底", "今日成交量大于 20 日均量 (+10): 有资金关注", "收盘离 MA50 太远 (+0): 追高回调风险大"], "wrong": "如果收盘跌破止损 139.54, 按计划离场, 不要死扛; 如果突破 20 日高点 222.19, 趋势可能转强, 再重新评估."}, {"ticker": "INTC", "name": "英特尔", "score": 0, "action": "回避/卖出信号", "cat": "avoid", "price": 61.2, "cur": "$", "stop": 45.42, "target": 84.87, "pos": "0%", "chg": 0, "ma20": 75.25, "ma50": 95.61, "ma200": 87.34, "rsi": 30.8, "atr": 6.31, "res": 95.68, "sup": 51.51, "earn": "2027-01-29", "earnWarn": false, "reasons": ["收盘在 MA200 之下 (+0): 长期趋势向下, 这是最重要的扣分项", "收盘在 MA50 之下 (+0): 中期趋势向下", "收盘在 MA20 之下 (+0): 短期走弱", "均线不是多头排列 (+0)", "MACD 在信号线之下 (+0): 短期动量向下", "RSI 31, 不在健康区间 (+0)", "今日成交量不大 (+0)", "收盘离 MA50 太远 (+0): 追高回调风险大"], "wrong": "如果收盘跌破止损 45.42, 按计划离场, 不要死扛; 如果突破 20 日高点 95.68, 趋势可能转强, 再重新评估."}];
+const NEWS={"AAPL": [{"t": "Jensen Huang vs. Steve Jobs: Can Nvidia also thrive without its visionary?", "d": "2026-11-12"}, {"t": "Tony Robbins: How to make yourself irreplaceable in the AI era", "d": "2026-11-12"}, {"t": "Tony Robbins: 4 rules the world's greatest investors follow", "d": "2026-11-12"}], "AMZN": [{"t": "PwC spots a major shift in retirement money", "d": "2026-11-13"}, {"t": "Cerebras Adds Microsoft Partnership to Diversify Beyond OpenAI", "d": "2026-11-12"}, {"t": "e.l.f. Beauty vs. lululemon athletica: Which Consumer Goods Stock Is a Better Buy for 2027?", "d": "2026-11-12"}], "AMD": [{"t": "AMD, Broadcom stocks jump as Nvidia CEO Jensen Huang resigns", "d": "2026-11-12"}, {"t": "AMD CEO Lisa Su on data center backlash: Tech has to sell the vision", "d": "2026-11-12"}, {"t": "AMD CEO Dr. Lisa Su reflects on her biggest lessons of 2026", "d": "2026-11-12"}], "MSFT": [{"t": "Bill Ackman says Microsoft's position is 'really, really strong' as Anthropic pushes into enterprise software", "d": "2026-11-12"}, {"t": "Why Bill Ackman sees value in Microsoft", "d": "2026-11-12"}, {"t": "Microsoft outage disrupts Outlook, Teams, and Copilot for users 'in any region'", "d": "2026-11-12"}], "AVGO": [{"t": "AMD, Broadcom stocks jump as Nvidia CEO Jensen Huang resigns", "d": "2026-11-12"}, {"t": "5 Best Growth Stocks for the Next 5 Years", "d": "2026-11-12"}, {"t": "Can Huang's Exit Create Chip Competition", "d": "2026-11-12"}], "TSM": [{"t": "Bernstein’s Mark Li Raised His Taiwan Semiconductor Manufacturing (TSM) Target to $600. Here’s What Changed", "d": "2026-11-12"}, {"t": "Here’s Why Bernstein’s Mark Li Is Raising His Price Target on TSMC (TSM) to $600", "d": "2026-11-12"}, {"t": "Prediction: $500 a Month Invested in Taiwan Semiconductor Manufacturing Will Be Worth This Much by 2030", "d": "2026-11-12"}], "ORCL": [{"t": "5 Best AI Stocks to Buy After Wells Fargo’s Outlook Upgrade", "d": "2026-11-12"}, {"t": "Cerebras Adds Microsoft Partnership to Diversify Beyond OpenAI", "d": "2026-11-12"}, {"t": "AI Chipmaker Cerebras Tops Q3 Views, Adds Big Customers", "d": "2026-11-12"}], "MU": [{"t": "5 Best Growth Stocks for the Next 5 Years", "d": "2026-11-12"}, {"t": "5 Unrivaled Stocks to Buy for the Next Decade", "d": "2026-11-12"}, {"t": "Micron, Other Memory Chip Stocks Fall on Nvidia Shakeup. Why They’re at Risk.", "d": "2026-11-12"}], "000660.KS": [], "META": [{"t": "Anthropic’s $500 Billion Question", "d": "2026-11-12"}, {"t": "Musk: SpaceX Makes Compute “Actually Usable” in 2 Months, 3x Faster than Rivals", "d": "2026-11-12"}, {"t": "What ERock (EROC) Said on Its Q3 Earnings Call", "d": "2026-11-12"}], "BABA": [{"t": "5 Best AI Stocks to Buy After Wells Fargo’s Outlook Upgrade", "d": "2026-11-12"}, {"t": "Why Jensen Huang’s Exit Is Bad News for Alibaba and China", "d": "2026-11-12"}, {"t": "Wall Street ends lower as Nvidia CEO resigns; US yields up", "d": "2026-11-12"}], "GOOGL": [{"t": "TeraWulf Stock Fell 24% in a Month. Lucid Capital Still Sees 67% Upside", "d": "2026-11-13"}, {"t": "Your Customers Are Asking AI About Your Company. Here’s How to Audit What It Says.", "d": "2026-11-13"}, {"t": "Alphabet Draws $5 Billion in Orders as AI Frenzy Builds", "d": "2026-11-12"}], "NVDA": [{"t": "Nvidia market cap plunges $490 billion following former CEO Huang's affair scandals", "d": "2026-11-12"}, {"t": "How Nvidia's stock decline might impact your 401(k) and portfolio", "d": "2026-11-12"}, {"t": "Alleged spy at center of Nvidia CEO affair reportedly being probed over Super Micro smuggling effort", "d": "2026-11-12"}], "INTC": [{"t": "Intel CEO Lip-Bu Tan on turnaround efforts amid stock slump: 'I feel called to do this'", "d": "2026-11-12"}, {"t": "Intel CEO Lip-Bu Tan sees a 'healthy pullback' ahead in the AI boom", "d": "2026-11-12"}, {"t": "Why Are Advanced Micro Devices (AMD) Shares Drawing Fresh AI Attention?", "d": "2026-11-12"}]};
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function fmt(n,cur){ if(n==null) return "—"; if(cur==="₩") return "₩"+n.toLocaleString(); return "$"+Number(n).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function barColor(s){ return s>=75?"var(--green)":s>=50?"#334155":s>=35?"var(--orange)":"var(--red)"; }
+function tagClass(cat){ return cat==="focus"?"green":cat==="watch"?"amber":"red"; }
+function render(list){
+  const grid=document.getElementById('grid');
+  grid.innerHTML=list.map(s=>{
+    const chgCls=s.chg>0?"up":s.chg<0?"down":"flat"; const chgTxt=(s.chg>0?"+":"")+s.chg+" 分";
+    const maHtml = s.ma20? `<div class="metrics"><div class="metric"><span>MA20</span><b>${s.ma20}</b></div><div class="metric"><span>MA50</span><b>${s.ma50}</b></div><div class="metric"><span>MA200</span><b>${s.ma200}</b></div><div class="metric"><span>RSI</span><b>${s.rsi}</b></div><div class="metric"><span>ATR</span><b>${s.atr}</b></div><div class="metric"><span>仓位上限</span><b>${s.pos}</b></div></div>` : `<div class="metrics"><div class="metric"><span>RSI</span><b>${s.rsi}</b></div><div class="metric"><span>ATR</span><b>${s.atr}</b></div><div class="metric"><span>仓位上限</span><b>${s.pos}</b></div><div class="metric"><span>MA20/50/200</span><b>—</b></div><div class="metric"><span>支撑 / 阻力</span><b>—</b></div><div class="metric"><span>较昨日</span><b>${chgTxt}</b></div></div>`;
+    const srHtml = s.res? `<div class="levels"><div>阻力<b>${fmt(s.res,s.cur)}</b></div><div>支撑<b>${fmt(s.sup,s.cur)}</b></div></div>`:"";
+    const nl=(NEWS[s.ticker]||[]); const newsHtml = nl.length? `<div class="news"><h5>相关新闻 · 只供鉴别，不改变评分</h5><ul>${nl.map(n=>`<li><time>${esc(n.d)}</time><span>${esc(n.t)}</span></li>`).join('')}</ul></div>` : `<div class="news"><h5>相关新闻 · 只供鉴别，不改变评分</h5><span class="none">暂无新闻标题</span></div>`;
+    const earnHtml = s.earn? `<div class="earn ${s.earnWarn?'warn':''}">${s.earnWarn?'⚠ 财报临近 · ':'📅 下次财报 · '}${s.earn}${s.earnWarn?'（7天内，财报前不新开仓）':''}</div>`:`<div class="earn" style="color:var(--muted)">📅 下次财报 · 未提供 / 非近期</div>`;
+    return `<article class="card" data-ticker="${s.ticker}">
+      <div class="card-head"><div><div class="ticker">${s.ticker}</div><div class="name">${s.name}</div><span class="tag ${tagClass(s.cat)}" style="margin-top:6px">${s.action}</span></div><div class="score"><div class="score-num" style="color:${barColor(s.score)}">${s.score}</div><div class="score-label">趋势评分</div><span class="change ${chgCls}">较昨日 ${chgTxt}</span></div></div>
+      <div class="bar"><i style="width:${s.score}%;background:${barColor(s.score)}"></i></div>
+      <div class="price-row"><span style="font-size:12px;color:var(--muted)">收盘价</span><span class="price">${fmt(s.price,s.cur)}</span></div>
+      <div class="levels"><div>止损价<b class="stop">${fmt(s.stop,s.cur)}</b></div><div>目标价<b class="target">${fmt(s.target,s.cur)}</b></div></div>
+      ${srHtml}${maHtml}${earnHtml}
+      ${newsHtml}
+      <button class="details-btn" onclick="toggleDetails(this)">查看打分理由 &amp; 如果错了怎么办 ↓</button>
+      <div class="details"><h4>为什么是 ${s.score} 分？</h4><ul>${s.reasons.map(r=>`<li>${r}</li>`).join('')}</ul><h4>如果错了怎么办？</h4><p>${s.wrong}</p><p>纪律提醒：止损是活的，每天按 ATR 更新；今天的止损是 ${fmt(s.stop,s.cur)}，明天可能变。以收盘价跌破为准，不盘中情绪化操作。</p></div>
+    </article>`;
+  }).join('');
+  document.getElementById('empty').style.display=list.length?'none':'block';
 }
-function searchCards(q){
-  q=q.trim().toLowerCase();
-  document.querySelectorAll('#list .card').forEach(c=>{
-    c.style.display = c.textContent.toLowerCase().includes(q) ? '' : 'none';
-  });
+function toggleDetails(btn){ const d=btn.nextElementSibling; const open=d.classList.toggle('open'); btn.textContent=open?'收起 ↑':'查看打分理由 & 如果错了怎么办 ↓'; }
+let curFilter='all';
+function apply(){
+  let list=[...STOCKS];
+  const q=document.getElementById('search').value.trim().toLowerCase();
+  if(curFilter==='focus') list=list.filter(s=>s.cat==='focus');
+  else if(curFilter==='watch') list=list.filter(s=>s.cat==='watch');
+  else if(curFilter==='avoid') list=list.filter(s=>s.cat==='avoid');
+  else if(curFilter==='earn') list=list.filter(s=>s.earnWarn);
+  if(q) list=list.filter(s=>(s.ticker+' '+s.name).toLowerCase().includes(q));
+  const sort=document.getElementById('sort').value;
+  if(sort==='score-desc') list.sort((a,b)=>b.score-a.score);
+  if(sort==='score-asc') list.sort((a,b)=>a.score-b.score);
+  if(sort==='change-desc') list.sort((a,b)=>Math.abs(b.chg)-Math.abs(a.chg));
+  render(list);
 }
+document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));c.classList.add('active');curFilter=c.dataset.filter;apply();}));
+document.getElementById('search').addEventListener('input',apply);
+document.getElementById('sort').addEventListener('change',apply);
+apply();
 </script>
-</body></html>
+</body>
+</html>
