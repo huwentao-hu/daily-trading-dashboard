@@ -116,7 +116,9 @@ out = out.replace(
     1)
 assert "仓位建议：" in out, "卡片仓位建议行插入失败"
 assert '"ticker": "AAPL"' in out, "STOCKS 替换失败"
-assert '"Jensen Huang vs. Steve Jobs' in out, "NEWS 替换失败"
+# NEWS 校验: 直接检查生成的 NEWS 数据块已写入页面, 不要断言某条具体新闻标题
+# (新闻每天换, 旧标题断言会在新数据一到就误报失败, 2026-11-14 实测触发过一次)
+assert news_js in out, "NEWS 替换失败"
 
 # ---- 2. 顶部总览 / 大盘面板 / 筛选数量, 全部动态 ----
 def sub(pattern, repl, name):
